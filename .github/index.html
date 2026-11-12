@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Трекер упражнений для козочки</title>
+<title>Колено — трекер упражнений</title>
 <meta name="theme-color" content="#0f766e">
 <style>
   :root{
@@ -69,12 +69,32 @@
   ul.rules li{margin:4px 0}
   .tag{font-size:.78rem;font-weight:700;padding:1px 7px;border-radius:99px;background:var(--line);color:var(--muted);vertical-align:middle;margin-left:6px;white-space:nowrap;display:inline-block}
   .tag.on{background:var(--accent-soft);color:var(--accent)}
+  .btns{display:flex;gap:8px;flex:0 0 auto}
+  .btn.small{padding:6px 12px;font-size:.9rem}
+  .cfg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+  .cfg label{font-size:.85rem;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+  .cfg input{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:6px 10px;width:100%}
+  .overlay{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:10px;padding:24px 20px calc(24px + env(safe-area-inset-bottom));text-align:center}
+  .overlay[hidden]{display:none}
+  .t-top{position:absolute;top:calc(12px + env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between}
+  .t-name{font-size:1.25rem;font-weight:700;max-width:520px}
+  .t-phase{font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+  .t-phase.rest{color:var(--muted)} .t-phase.prep{color:var(--warn)}
+  .t-big{font-size:6rem;line-height:1;font-weight:800;font-variant-numeric:tabular-nums;margin:6px 0}
+  .t-big.text{font-size:2.6rem}
+  .t-sets{color:var(--muted);font-size:1rem}
+  .t-bar{width:min(420px,90%);height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+  .t-bar > div{height:100%;background:var(--accent);width:0}
+  .t-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+  .t-controls .btn{min-width:120px;padding:12px 18px;font-size:1.05rem}
+  .t-hint{color:var(--muted);font-size:.85rem;max-width:420px}
   footer{max-width:760px;margin:0 auto;padding:8px 16px 32px;color:var(--muted);font-size:.82rem}
 </style>
 </head>
 <body>
 <header>
-  <h1>Колено - трекер упражнений</h1>
+  <h1>Колено — трекер упражнений</h1>
   <p class="sub">Тендинопатия связки надколенника · хондромаляция надколенника · растяжение ПКС</p>
 </header>
 
@@ -89,7 +109,7 @@
 <main>
   <!-- СЕГОДНЯ -->
   <section id="tab-today">
-    <div class="card banner"><strong>Не план лечения.</strong> Это справочник по материалам NHS. В «Сегодня» попадают только упражнения, которые ты отметил как одобренные физическим терапевтом. Подходы и повторения - как скажет терапевт.</div>
+    <div class="card banner"><strong>Не план лечения.</strong> Это справочник по материалам NHS. В «Сегодня» попадают только упражнения, которые ты отметил как одобренные физическим терапевтом. Подходы и повторения — как скажет терапевт.</div>
     <div class="card">
       <h3 id="today-date"></h3>
       <div class="progress"><div id="today-bar"></div></div>
@@ -103,7 +123,7 @@
     <div id="catalog"></div>
     <div class="card">
       <h3>Только у специалиста</h3>
-      <p class="how">Мобилизация надколенника и работа на ROM (из твоего плана реабилитации) - это ручные техники терапевта, дома их не повторить.</p>
+      <p class="how">Мобилизация надколенника и работа на ROM (из твоего плана реабилитации) — это ручные техники терапевта, дома их не повторить.</p>
     </div>
   </section>
 
@@ -112,7 +132,7 @@
     <div class="card">
       <h3>Запись за день</h3>
       <div class="row"><input type="date" id="d-date" aria-label="Дата"></div>
-      <p class="src" style="margin:12px 0 2px">Боль при спуске по лестнице (0 - нет, 10 - максимум)</p>
+      <p class="src" style="margin:12px 0 2px">Боль при спуске по лестнице (0 — нет, 10 — максимум)</p>
       <div class="slider"><input type="range" id="d-stairs" min="0" max="10" value="0" aria-label="Боль при спуске"><span class="score" id="d-stairs-v">0</span></div>
       <p class="src" style="margin:12px 0 2px">Боль после долгого сидения</p>
       <div class="slider"><input type="range" id="d-sit" min="0" max="10" value="0" aria-label="Боль после сидения"><span class="score" id="d-sit-v">0</span></div>
@@ -131,9 +151,9 @@
     <div class="card">
       <h3>Боль во время упражнений</h3>
       <ul class="rules">
-        <li>Боль во время упражнения не должна быть больше обычной более чем на 1-2 балла по шкале 0-10.</li>
+        <li>Боль во время упражнения не должна быть больше обычной более чем на 1–2 балла по шкале 0–10.</li>
         <li>Она должна пройти в течение примерно 30 минут, и на следующий день колено не должно быть хуже.</li>
-        <li>Если стало хуже - в следующий раз меньше повторений или шаг назад к более лёгкому упражнению.</li>
+        <li>Если стало хуже — в следующий раз меньше повторений или шаг назад к более лёгкому упражнению.</li>
         <li>Упростить упражнение можно так: меньше амплитуда, меньше повторений, меньше вес, медленнее темп, больше отдых между подходами.</li>
       </ul>
       <p class="src">Источники: <a href="https://wiltshirehealthandcare.nhs.uk/wp-content/uploads/sites/8/2024/08/Patella-Tendinopathy-PIL-100.0.pdf" target="_blank" rel="noopener">Wiltshire Health and Care</a>, <a href="https://newcastle-hospitals.nhs.uk/wp-content/uploads/2021/11/2024-Newcastle-OHS-Anterior-Knee-Pain-leaflet_PRINT_ONLY-1.pdf" target="_blank" rel="noopener">Newcastle Hospitals</a>, <a href="https://www.nhsaaa.net/?p=6505" target="_blank" rel="noopener">NHS Ayrshire &amp; Arran</a></p>
@@ -141,9 +161,9 @@
     <div class="card">
       <h3>Логика этапов</h3>
       <ul class="rules">
-        <li><b>Этап 1 - изометрия</b>: удержание без движения. Старт, когда больно даже на лестнице.</li>
-        <li><b>Этап 2 - изотоника</b>: силовые с движением, когда этап 1 переносится хорошо.</li>
-        <li><b>Этап 3 - «пружинящие»</b>: прыжки и быстрые движения, когда сила и боль заметно улучшились.</li>
+        <li><b>Этап 1 — изометрия</b>: удержание без движения. Старт, когда больно даже на лестнице.</li>
+        <li><b>Этап 2 — изотоника</b>: силовые с движением, когда этап 1 переносится хорошо.</li>
+        <li><b>Этап 3 — «пружинящие»</b>: прыжки и быстрые движения, когда сила и боль заметно улучшились.</li>
       </ul>
       <p class="src">Источник: <a href="https://sbuhb.nhs.wales/hospitals/a-z-services/physiotherapy/musculoskeletal-physiotherapy/knee-pain/patella-tendinopathy/" target="_blank" rel="noopener">NHS Swansea Bay</a></p>
     </div>
@@ -175,6 +195,24 @@
   </section>
 </main>
 
+<div id="timer" class="overlay" hidden role="dialog" aria-label="Таймер упражнения">
+  <div class="t-top">
+    <button class="btn ghost small" id="t-voice">🔊 Голос: вкл</button>
+    <button class="btn ghost small" id="t-close" aria-label="Закрыть таймер">✕ Стоп</button>
+  </div>
+  <div class="t-name" id="t-name"></div>
+  <div class="t-phase" id="t-phase"></div>
+  <div class="t-big" id="t-big"></div>
+  <div class="t-bar"><div id="t-bar"></div></div>
+  <div class="t-sets" id="t-sets"></div>
+  <div class="t-controls">
+    <button class="btn" id="t-done" hidden>Готово</button>
+    <button class="btn ghost" id="t-pause">Пауза</button>
+    <button class="btn ghost" id="t-skip">Пропустить</button>
+  </div>
+  <p class="t-hint" id="t-hint"></p>
+</div>
+
 <footer>Упражнения взяты из открытых материалов NHS для пациентов. Страница не заменяет назначения врача или физического терапевта.</footer>
 
 <script>
@@ -182,64 +220,64 @@
   "use strict";
 
   var SRC = {
-    swansea: ["NHS Swansea Bay - тендинопатия надколенника","https://sbuhb.nhs.wales/hospitals/a-z-services/physiotherapy/musculoskeletal-physiotherapy/knee-pain/patella-tendinopathy/"],
-    ayrshire: ["NHS Ayrshire & Arran - тендинопатия надколенника","https://www.nhsaaa.net/?p=6505"],
-    leeds: ["Leeds NHS - тендинопатия надколенника","https://leedscommunityhealthcare.nhs.uk/our-services-a-z/musculoskeletal-msk/knee-problems/known-diagnosed-knee-problems/patella-tendonopathy"],
-    wilts: ["Wiltshire Health and Care - брошюра (PDF)","https://wiltshirehealthandcare.nhs.uk/wp-content/uploads/sites/8/2024/08/Patella-Tendinopathy-PIL-100.0.pdf"],
-    ruhT: ["RUH Bath - тендинопатия надколенника (PDF)","https://www.ruh.nhs.uk/patients/services/physiotherapy/documents/Patellar_Tendinopathy.pdf"],
-    ruhP: ["RUH Bath - пателлофеморальная боль (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY027_Patellofemoral_pain.pdf"],
-    ruhA: ["RUH Bath - буклет по ПКС (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY034_ACL_prehab_booklet.pdf"],
-    cuh: ["Cambridge University Hospitals - передняя боль в колене","https://cuh.nhs.uk/patient-information/patello-femoral-syndrome-anterior-knee-pain-or-chondromalacia-patella"],
-    lanark: ["NHS Lanarkshire - пателлофеморальная боль (8 видео по этапам)","https://www.nhslanarkshire.scot.nhs.uk/?p=27401"]
+    swansea: ["NHS Swansea Bay — тендинопатия надколенника","https://sbuhb.nhs.wales/hospitals/a-z-services/physiotherapy/musculoskeletal-physiotherapy/knee-pain/patella-tendinopathy/"],
+    ayrshire: ["NHS Ayrshire & Arran — тендинопатия надколенника","https://www.nhsaaa.net/?p=6505"],
+    leeds: ["Leeds NHS — тендинопатия надколенника","https://leedscommunityhealthcare.nhs.uk/our-services-a-z/musculoskeletal-msk/knee-problems/known-diagnosed-knee-problems/patella-tendonopathy"],
+    wilts: ["Wiltshire Health and Care — брошюра (PDF)","https://wiltshirehealthandcare.nhs.uk/wp-content/uploads/sites/8/2024/08/Patella-Tendinopathy-PIL-100.0.pdf"],
+    ruhT: ["RUH Bath — тендинопатия надколенника (PDF)","https://www.ruh.nhs.uk/patients/services/physiotherapy/documents/Patellar_Tendinopathy.pdf"],
+    ruhP: ["RUH Bath — пателлофеморальная боль (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY027_Patellofemoral_pain.pdf"],
+    ruhA: ["RUH Bath — буклет по ПКС (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY034_ACL_prehab_booklet.pdf"],
+    cuh: ["Cambridge University Hospitals — передняя боль в колене","https://cuh.nhs.uk/patient-information/patello-femoral-syndrome-anterior-knee-pain-or-chondromalacia-patella"],
+    lanark: ["NHS Lanarkshire — пателлофеморальная боль (8 видео по этапам)","https://www.nhslanarkshire.scot.nhs.uk/?p=27401"]
   };
 
   var STAGES = [
-    {id:1, title:"Этап 1 - изометрия", note:"Удержание без движения. С него начинают, когда колено болит даже на лестнице."},
-    {id:2, title:"Этап 2 - изотоника", note:"Силовые с движением. В NHS Swansea Bay: 3-4 подхода, вес от 15ПМ постепенно до 6ПМ, через день. ПМ - повторный максимум, вес, с которым получается ровно столько повторений."},
-    {id:3, title:"Этап 3 - «пружинящие» нагрузки", note:"Прыжки и быстрые движения. Только когда сила и боль заметно улучшились и терапевт дал добро."}
+    {id:1, title:"Этап 1 — изометрия", note:"Удержание без движения. С него начинают, когда колено болит даже на лестнице."},
+    {id:2, title:"Этап 2 — изотоника", note:"Силовые с движением. В NHS Swansea Bay: 3–4 подхода, вес от 15ПМ постепенно до 6ПМ, через день. ПМ — повторный максимум, вес, с которым получается ровно столько повторений."},
+    {id:3, title:"Этап 3 — «пружинящие» нагрузки", note:"Прыжки и быстрые движения. Только когда сила и боль заметно улучшились и терапевт дал добро."}
   ];
 
   var EX = [
-    {id:"qset", stage:1, name:"Напряжение квадрицепса сидя",
+    {id:"qset", cfg:{sets:10,hold:10,reps:0,rest:10}, stage:1, name:"Напряжение квадрицепса сидя",
      how:"Сядь на пол или кровать, больная нога вытянута, вторая согнута. Напряги мышцы передней поверхности бедра, прижимая колено вниз, подержи и расслабь.",
      params:"По NHS Ayrshire: 3 раза в день", src:["ayrshire"]},
-    {id:"isoext", stage:1, name:"Изометрическое разгибание колена",
+    {id:"isoext", cfg:{sets:5,hold:45,reps:0,rest:60}, stage:1, name:"Изометрическое разгибание колена",
      how:"Сидя, упрись голенью в неподвижную опору или в закреплённую резинку и дави так, будто разгибаешь колено, но без движения.",
-     params:"5 × 30-45 с, ежедневно", src:["wilts","swansea"]},
-    {id:"wallsit", stage:1, name:"«Стульчик» у стены",
+     params:"5 × 30–45 с, ежедневно", src:["wilts","swansea"]},
+    {id:"wallsit", cfg:{sets:5,hold:45,reps:0,rest:90}, stage:1, name:"«Стульчик» у стены",
      how:"Встань спиной к стене и съедь вниз, пока колени не согнутся примерно на 70°. Держи позицию.",
-     params:"5 × 30-45 с, отдых 1-2 мин, 3-5 раз в день",
-     caution:"При хондромаляции глубина сгибания важна - угол уточни у терапевта.", src:["leeds"]},
-    {id:"slr", stage:1, name:"Подъём прямой ноги",
+     params:"5 × 30–45 с, отдых 1–2 мин, 3–5 раз в день",
+     caution:"При хондромаляции глубина сгибания важна — угол уточни у терапевта.", src:["leeds"]},
+    {id:"slr", cfg:{sets:3,hold:0,reps:10,rest:60}, stage:1, name:"Подъём прямой ноги",
      how:"Лёжа на спине, вытяни ногу. Напряги бедро, подними прямую ногу примерно на 15 см и медленно опусти.",
      params:"3 × 10", src:["ruhP"]},
-    {id:"quadiso", stage:2, name:"Силовое на квадрицепс",
-     how:"Разгибание ног в тренажёре, жим ногами или их вариант с резинкой - конкретное упражнение и амплитуду выбирает терапевт.",
-     params:"3-4 подхода, 15ПМ → 6ПМ, через день", src:["swansea","ruhT"]},
-    {id:"stepup", stage:2, name:"Зашагивание на ступеньку (step-up)",
+    {id:"quadiso", cfg:{sets:3,hold:0,reps:15,rest:90}, stage:2, name:"Силовое на квадрицепс",
+     how:"Разгибание ног в тренажёре, жим ногами или их вариант с резинкой — конкретное упражнение и амплитуду выбирает терапевт.",
+     params:"3–4 подхода, 15ПМ → 6ПМ, через день", src:["swansea","ruhT"]},
+    {id:"stepup", cfg:{sets:3,hold:0,reps:10,rest:90}, stage:2, name:"Зашагивание на ступеньку (step-up)",
      how:"Встань лицом к ступеньке, больная нога на ступеньке. Поднимись, перенося вес на неё, и медленно опустись.",
      params:"По указанию терапевта", src:["cuh","ruhP"]},
-    {id:"hip", stage:2, name:"Мышцы таза и бедра",
+    {id:"hip", cfg:{sets:3,hold:0,reps:15,rest:60}, stage:2, name:"Мышцы таза и бедра",
      how:"Например, отведение ноги лёжа на боку. По NHS Lanarkshire, сочетание упражнений для бедра и колена работает лучше, чем только для колена.",
      params:"По указанию терапевта", src:["lanark"]},
-    {id:"acl", stage:2, name:"Стабильность колена (с учётом ПКС)",
+    {id:"acl", cfg:{sets:3,hold:0,reps:10,rest:60}, stage:2, name:"Стабильность колена (с учётом ПКС)",
      how:"Упражнения на контроль и стабильность колена. Подбирает терапевт с учётом растяжения ПКС.",
      params:"По указанию терапевта", src:["ruhA"]},
-    {id:"energy", stage:3, name:"Прыжковые упражнения",
+    {id:"energy", cfg:{sets:3,hold:0,reps:10,rest:90}, stage:3, name:"Прыжковые упражнения",
      how:"Сначала постепенно увеличивают объём, потом интенсивность. Только с разрешения терапевта.",
      params:"По указанию терапевта", src:["swansea","ruhT"]}
   ];
 
   // ---------- storage ----------
   var KEY = "knee-rehab-v1";
-  var mem = {approved:{}, notes:{}, log:{}, diary:{}};
+  var mem = {approved:{}, notes:{}, log:{}, diary:{}, cfg:{}, settings:{voice:true}};
   function load(){
     try{ var raw = localStorage.getItem(KEY); if(raw){ var d = JSON.parse(raw); mem = normalize(d); } }catch(e){}
   }
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(mem)); }catch(e){} }
   function normalize(d){
     d = d && typeof d === "object" ? d : {};
-    return {approved:d.approved||{}, notes:d.notes||{}, log:d.log||{}, diary:d.diary||{}};
+    return {approved:d.approved||{}, notes:d.notes||{}, log:d.log||{}, diary:d.diary||{}, cfg:d.cfg||{}, settings:Object.assign({voice:true}, d.settings||{})};
   }
 
   // ---------- helpers ----------
@@ -251,6 +289,12 @@
     if(attrs) for(var a in attrs){ if(a==="text") n.textContent=attrs[a]; else if(a==="html") n.innerHTML=attrs[a]; else n.setAttribute(a,attrs[a]); }
     (children||[]).forEach(function(c){ if(c) n.appendChild(c); });
     return n;
+  }
+  function getCfg(e){ return Object.assign({}, e.cfg, mem.cfg[e.id]||{}); }
+  function cfgText(e){
+    var c=getCfg(e);
+    var work = c.hold>0 ? (c.hold+" с удержание") : (c.reps+" повт.");
+    return "Таймер: "+c.sets+" × "+work+(c.sets>1 && c.rest>0 ? ", отдых "+c.rest+" с" : "");
   }
   function srcLinks(keys){
     var p=el("p",{"class":"src"}); p.appendChild(document.createTextNode("Источник: "));
@@ -291,6 +335,19 @@
         ta.addEventListener("input",function(){ mem.notes[e.id]=ta.value; save(); });
         var det=el("details",null,[el("summary",{text:"Указания терапевта"}),ta]);
         if(ta.value) det.open=true;
+        var c=getCfg(e), grid=el("div",{"class":"cfg"});
+        [["sets","Подходы",1,30],["hold","Удержание, с (0 — на повторы)",0,600],["reps","Повторы в подходе",0,100],["rest","Отдых, с",0,600]].forEach(function(f){
+          var inp=el("input",{type:"number",min:String(f[2]),max:String(f[3]),inputmode:"numeric"});
+          inp.value=c[f[0]];
+          inp.addEventListener("change",function(){
+            var v=Math.max(f[2],Math.min(f[3],parseInt(inp.value,10)||0)); inp.value=v;
+            mem.cfg[e.id]=Object.assign({},mem.cfg[e.id]||{}); mem.cfg[e.id][f[0]]=v; save();
+            sum.textContent=cfgText(e);
+          });
+          grid.appendChild(el("label",null,[document.createTextNode(f[1]),inp]));
+        });
+        var sum=el("p",{"class":"src",text:cfgText(e)});
+        var tdet=el("details",null,[el("summary",{text:"Таймер (по умолчанию — правь под терапевта)"}),sum,grid]);
         root.appendChild(el("div",{"class":"card"},[
           el("h3",null,[document.createTextNode(e.name),tag]),
           el("span",{"class":"params",text:e.params}),
@@ -298,6 +355,7 @@
           e.caution ? el("p",{"class":"caution",text:"⚠ "+e.caution}) : null,
           srcLinks(e.src),
           el("div",{"class":"row"},[el("label",{"class":"chk"},[chk,document.createTextNode("Одобрено терапевтом")])]),
+          tdet,
           det
         ]));
       });
@@ -323,13 +381,17 @@
         if(i>-1) arr.splice(i,1); else arr.push(e.id);
         mem.log[k]=arr; save(); renderToday();
       });
-      var note=mem.notes[e.id] ? mem.notes[e.id] : e.params;
+      btn.className += " small";
+      var start=el("button",{"class":"btn small",text:"▶ Старт","aria-label":"Запустить таймер: "+e.name});
+      start.addEventListener("click",function(){ Timer.start(e); });
+      if(isDone) start.className="btn ghost small";
       list.appendChild(el("div",{"class":"today-item"},[
         el("div",null,[
           el("div",null,[document.createTextNode(e.name+" "), isDone?el("span",{"class":"done",text:"✓"}):null]),
-          el("div",{"class":"meta",text:note})
+          el("div",{"class":"meta",text:cfgText(e)}),
+          mem.notes[e.id] ? el("div",{"class":"meta",text:"Терапевт: "+mem.notes[e.id]}) : null
         ]),
-        btn
+        el("div",{"class":"btns"},[start,btn])
       ]));
     });
     var n=approved.filter(function(e){return done.indexOf(e.id)>-1;}).length;
@@ -365,7 +427,7 @@
       var r=mem.diary[k]; var ex=(mem.log[k]||[]).length;
       tb.appendChild(el("tr",null,[
         el("td",{text:fmt(k)}), el("td",{text:String(r.stairs)}), el("td",{text:String(r.sit)}),
-        el("td",{text:r.lock?"да":"-"}), el("td",{text:String(ex)}), el("td",{text:r.note||""})
+        el("td",{text:r.lock?"да":"—"}), el("td",{text:String(ex)}), el("td",{text:r.note||""})
       ]));
     });
     root.appendChild(el("table",null,[
@@ -393,9 +455,194 @@
   });
   document.getElementById("reset").addEventListener("click",function(){
     if(!confirm("Удалить все отметки, заметки и дневник на этом устройстве?")) return;
-    mem={approved:{},notes:{},log:{},diary:{}}; save(); renderCatalog(); renderToday();
+    mem=normalize({}); save(); renderCatalog(); renderToday();
     document.getElementById("data-msg").textContent="Данные удалены.";
   });
+
+  // ---------- voice / sound ----------
+  var Voice = (function(){
+    var ruVoice=null, synth=window.speechSynthesis||null;
+    function pick(){
+      if(!synth) return;
+      try{
+        var vs=synth.getVoices()||[];
+        ruVoice = vs.filter(function(v){return /^ru/i.test(v.lang);})
+                    .sort(function(a,b){ return (b.localService?1:0)-(a.localService?1:0); })[0] || null;
+      }catch(e){}
+    }
+    if(synth){ pick(); try{ synth.addEventListener("voiceschanged",pick); }catch(e){ synth.onvoiceschanged=pick; } }
+    function say(text, interrupt){
+      if(!mem.settings.voice || !synth) return;
+      try{
+        if(interrupt) synth.cancel();
+        var u=new SpeechSynthesisUtterance(text);
+        u.lang="ru-RU"; if(ruVoice) u.voice=ruVoice; u.rate=1.05;
+        synth.speak(u);
+      }catch(e){}
+    }
+    function stop(){ try{ if(synth) synth.cancel(); }catch(e){} }
+    function hasRu(){ return !!ruVoice; }
+    function available(){ return !!synth; }
+    return {say:say, stop:stop, hasRu:hasRu, available:available};
+  })();
+
+  var Sound = (function(){
+    var ctx=null;
+    function unlock(){
+      try{
+        if(!ctx){ var AC=window.AudioContext||window.webkitAudioContext; if(AC) ctx=new AC(); }
+        if(ctx && ctx.state==="suspended") ctx.resume();
+      }catch(e){}
+    }
+    function beep(freq, ms){
+      if(!ctx) return;
+      try{
+        var o=ctx.createOscillator(), g=ctx.createGain();
+        o.frequency.value=freq||880; o.type="sine";
+        g.gain.setValueAtTime(0.0001,ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.25,ctx.currentTime+0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+(ms||150)/1000);
+        o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime+(ms||150)/1000+0.02);
+      }catch(e){}
+    }
+    function buzz(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+    return {unlock:unlock, beep:beep, buzz:buzz};
+  })();
+
+  var Wake = (function(){
+    var lock=null, want=false;
+    function req(){
+      if(!want || !("wakeLock" in navigator)) return;
+      try{ navigator.wakeLock.request("screen").then(function(l){ lock=l; }).catch(function(){}); }catch(e){}
+    }
+    document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="visible" && want) req(); });
+    return {
+      on:function(){ want=true; req(); },
+      off:function(){ want=false; try{ if(lock) lock.release(); }catch(e){} lock=null; },
+      supported:function(){ return "wakeLock" in navigator; }
+    };
+  })();
+
+  // ---------- timer ----------
+  var Timer = (function(){
+    var $=function(id){return document.getElementById(id);};
+    var ov=$("timer"), tName=$("t-name"), tPhase=$("t-phase"), tBig=$("t-big"), tSets=$("t-sets"),
+        tBar=$("t-bar"), bDone=$("t-done"), bPause=$("t-pause"), bSkip=$("t-skip"), bClose=$("t-close"),
+        bVoice=$("t-voice"), tHint=$("t-hint");
+    var ex=null, cfg=null, phases=[], idx=0, endAt=0, remain=0, paused=false, iv=null, spoken={};
+    var PREP=5;
+
+    function plural(n, one, few, many){
+      var m10=n%10, m100=n%100;
+      if(m10===1 && m100!==11) return one;
+      if(m10>=2 && m10<=4 && (m100<12 || m100>14)) return few;
+      return many;
+    }
+    function build(){
+      phases=[{type:"prep", dur:PREP}];
+      for(var i=1;i<=cfg.sets;i++){
+        phases.push(cfg.hold>0 ? {type:"hold", dur:cfg.hold, set:i} : {type:"reps", set:i});
+        if(i<cfg.sets && cfg.rest>0) phases.push({type:"rest", dur:cfg.rest, set:i});
+      }
+    }
+    function voiceBtn(){ bVoice.textContent = mem.settings.voice ? "🔊 Голос: вкл" : "🔇 Голос: выкл"; }
+
+    function start(e){
+      ex=e; cfg=getCfg(e);
+      if(!cfg.sets){ return; }
+      Sound.unlock(); Wake.on(); build(); idx=0; paused=false;
+      tName.textContent=e.name; voiceBtn();
+      var hints=[];
+      if(!Voice.available()) hints.push("Голосовой движок в этом браузере недоступен — будут только звуковые сигналы.");
+      else if(!Voice.hasRu()) hints.push("Русский голос не найден — браузер может читать с акцентом. Его можно установить в настройках речи телефона.");
+      if(!Wake.supported()) hints.push("Этот браузер не умеет держать экран включённым — увеличь время автоблокировки на время занятия.");
+      tHint.textContent=hints.join(" ");
+      ov.hidden=false; document.body.style.overflow="hidden";
+      Voice.say(e.name+". "+describe(), true);
+      enter();
+      clearInterval(iv); iv=setInterval(tick,200);
+    }
+    function describe(){
+      var s=cfg.sets+" "+plural(cfg.sets,"подход","подхода","подходов");
+      if(cfg.hold>0) s+=" по "+cfg.hold+" "+plural(cfg.hold,"секунде","секунды","секунд");
+      else s+=" по "+cfg.reps+" "+plural(cfg.reps,"повторению","повторения","повторений");
+      return s;
+    }
+    function enter(){
+      var p=phases[idx]; spoken={};
+      tPhase.className="t-phase"+(p.type==="rest"?" rest":p.type==="prep"?" prep":"");
+      tBig.className="t-big"; bDone.hidden=true; bPause.hidden=false;
+      if(p.type==="prep"){ tPhase.textContent="Приготовься"; tSets.textContent=describe(); }
+      if(p.type==="hold"){ tPhase.textContent="Держи"; tSets.textContent="Подход "+p.set+" из "+cfg.sets;
+        Voice.say("Подход "+p.set+". Держи.", false); Sound.beep(880,200); Sound.buzz(150); }
+      if(p.type==="rest"){ tPhase.textContent="Отдых"; tSets.textContent="Следующий: подход "+(p.set+1)+" из "+cfg.sets;
+        Voice.say("Отдых "+p.dur+" "+plural(p.dur,"секунда","секунды","секунд")+".", true); Sound.beep(520,250); Sound.buzz([80,60,80]); }
+      if(p.type==="reps"){
+        tPhase.textContent="Выполняй"; tSets.textContent="Подход "+p.set+" из "+cfg.sets;
+        tBig.className="t-big text"; tBig.textContent=cfg.reps+" "+plural(cfg.reps,"повтор","повтора","повторов");
+        bDone.hidden=false; bPause.hidden=true; tBar.style.width="0";
+        Voice.say("Подход "+p.set+". "+cfg.reps+" "+plural(cfg.reps,"повторение","повторения","повторений")+". Нажми готово, когда закончишь.", false);
+        Sound.beep(880,200); Sound.buzz(150);
+        return;
+      }
+      endAt=Date.now()+p.dur*1000; remain=p.dur*1000; render();
+    }
+    function render(){
+      var p=phases[idx]; if(!p || p.type==="reps") return;
+      var left = paused ? remain : Math.max(0,endAt-Date.now());
+      var sec=Math.ceil(left/1000);
+      var m=Math.floor(sec/60), s=sec%60;
+      tBig.textContent = m>0 ? (m+":"+(s<10?"0":"")+s) : String(sec);
+      tBar.style.width = Math.min(100, (1-left/(p.dur*1000))*100)+"%";
+      return {left:left, sec:sec};
+    }
+    function tick(){
+      if(ov.hidden || paused) return;
+      var p=phases[idx]; if(!p || p.type==="reps") return;
+      var r=render(); if(!r) return;
+      if(p.dur>=20 && r.sec===10 && !spoken[10]){ spoken[10]=1; Voice.say(p.type==="rest"?"Через 10 секунд — следующий подход":"Осталось 10 секунд", false); }
+      if(r.sec<=3 && r.sec>=1 && !spoken[r.sec]){ spoken[r.sec]=1; Sound.beep(660,90); if(p.type!=="prep") Voice.say(["","один","два","три"][r.sec], true); }
+      if(r.left<=0) next();
+    }
+    function next(){
+      idx++;
+      if(idx>=phases.length){ finish(); return; }
+      enter();
+    }
+    function finish(){
+      clearInterval(iv); iv=null;
+      var k=todayKey(), arr=mem.log[k]||[];
+      if(arr.indexOf(ex.id)<0){ arr.push(ex.id); mem.log[k]=arr; save(); }
+      tPhase.className="t-phase"; tPhase.textContent="Готово";
+      tBig.className="t-big text"; tBig.textContent="✓ Упражнение выполнено";
+      tSets.textContent="Отмечено в «Сегодня»"; tBar.style.width="100%";
+      bDone.hidden=true; bPause.hidden=true; bSkip.hidden=true;
+      bClose.textContent="✕ Закрыть";
+      Voice.say("Упражнение завершено. Отличная работа.", true); Sound.beep(988,180); setTimeout(function(){Sound.beep(1318,260);},200); Sound.buzz([120,80,200]);
+      Wake.off();
+    }
+    function close(){
+      clearInterval(iv); iv=null; Voice.stop(); Wake.off();
+      ov.hidden=true; document.body.style.overflow="";
+      bSkip.hidden=false; bPause.hidden=false; bPause.textContent="Пауза"; bClose.textContent="✕ Стоп";
+      renderToday();
+    }
+    bPause.addEventListener("click",function(){
+      var p=phases[idx]; if(!p || p.type==="reps") return;
+      if(!paused){ remain=Math.max(0,endAt-Date.now()); paused=true; bPause.textContent="Продолжить"; Voice.say("Пауза", true); Wake.off(); }
+      else { endAt=Date.now()+remain; paused=false; bPause.textContent="Пауза"; Voice.say("Продолжаем", true); Wake.on(); }
+      render();
+    });
+    bSkip.addEventListener("click",function(){ if(paused){ paused=false; bPause.textContent="Пауза"; } Voice.stop(); next(); });
+    bDone.addEventListener("click",function(){ Voice.stop(); next(); });
+    bClose.addEventListener("click",close);
+    bVoice.addEventListener("click",function(){
+      mem.settings.voice=!mem.settings.voice; save(); voiceBtn();
+      if(!mem.settings.voice) Voice.stop(); else Voice.say("Голос включён", true);
+    });
+    document.addEventListener("keydown",function(ev){ if(!ov.hidden && ev.key==="Escape") close(); });
+    return {start:start};
+  })();
 
   load(); renderCatalog(); renderToday();
 })();
