@@ -3,25 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Колено — трекер упражнений</title>
+<title>Колено - тренировки</title>
 <meta name="theme-color" content="#0f766e">
 <style>
   :root{
-    --bg:#f6f7f8; --card:#fff; --text:#1c2126; --muted:#5f6b76; --line:#e3e7eb;
-    --accent:#0f766e; --accent-soft:#e6f4f2; --warn:#b45309; --warn-soft:#fef3e2;
-    --ok:#15803d; --radius:14px;
+    --bg:#f6f7f8; --card:#fff; --text:#1c2126; --muted:#5f6b76; --line:#e3e7eb; --limb2:#b9c2ca;
+    --accent:#0f766e; --accent-soft:#e6f4f2; --warn:#c2410c; --warn-soft:#fdf0e6;
+    --ok:#15803d; --part:#86c5bd; --radius:14px;
   }
   @media (prefers-color-scheme: dark){
-    :root{ --bg:#111417; --card:#1a1f24; --text:#e8ecef; --muted:#9aa6b1; --line:#2b3238;
-      --accent:#2dd4bf; --accent-soft:#12312e; --warn:#fbbf24; --warn-soft:#3a2c10; --ok:#4ade80; }
+    :root{ --bg:#111417; --card:#1a1f24; --text:#e8ecef; --muted:#9aa6b1; --line:#2b3238; --limb2:#56616b;
+      --accent:#2dd4bf; --accent-soft:#12312e; --warn:#fb923c; --warn-soft:#3a2310; --ok:#4ade80; --part:#1f6f66; }
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--text);
     font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     padding-bottom:env(safe-area-inset-bottom)}
   header{padding:20px 16px 8px;max-width:760px;margin:0 auto}
-  h1{font-size:1.45rem;margin:0 0 4px}
-  .sub{color:var(--muted);font-size:.92rem;margin:0}
+  h1{font-size:1.45rem;margin:0}
   nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
   nav .wrap{max-width:760px;margin:0 auto;display:flex;gap:4px;padding:8px 12px;overflow-x:auto}
   nav button{flex:0 0 auto;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;
@@ -30,11 +29,9 @@
   main{max-width:760px;margin:0 auto;padding:12px}
   section[hidden]{display:none}
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:0 0 12px}
-  .banner{background:var(--warn-soft);border-color:transparent;font-size:.93rem}
-  .banner strong{color:var(--warn)}
   h2{font-size:1.1rem;margin:18px 4px 8px}
   h3{font-size:1rem;margin:0 0 4px}
-  .stage-note{color:var(--muted);font-size:.9rem;margin:-4px 4px 10px}
+  .muted{color:var(--muted);font-size:.9rem}
   .params{display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:600;
     font-size:.88rem;border-radius:8px;padding:2px 8px;margin:4px 0}
   .how{margin:6px 0}
@@ -42,128 +39,134 @@
   .src{font-size:.85rem;color:var(--muted)}
   .src a{color:var(--accent)}
   .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
-  label.chk{display:flex;gap:8px;align-items:center;cursor:pointer;font-size:.95rem}
-  input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent)}
-  textarea,input[type=date],input[type=text]{width:100%;font:inherit;color:var(--text);background:var(--bg);
-    border:1px solid var(--line);border-radius:10px;padding:8px 10px}
-  textarea{min-height:60px;resize:vertical}
-  details summary{cursor:pointer;color:var(--muted);font-size:.9rem;margin-top:8px}
   .btn{border:1px solid var(--accent);background:var(--accent);color:#fff;font:inherit;font-weight:600;
     padding:8px 14px;border-radius:10px;cursor:pointer}
   .btn.ghost{background:transparent;color:var(--accent)}
-  .btn:disabled{opacity:.45;cursor:default}
-  .today-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
-  .today-item:last-child{border-bottom:0}
-  .today-item .meta{color:var(--muted);font-size:.88rem}
-  .done{color:var(--ok);font-weight:700}
-  .empty{color:var(--muted);font-size:.95rem}
+  .btn.small{padding:6px 12px;font-size:.9rem}
+  .btn.big{width:100%;padding:14px;font-size:1.1rem;border-radius:12px}
+  .seg{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+  .seg button{flex:1;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;padding:7px 10px;border-radius:8px;cursor:pointer}
+  .seg button.on{background:var(--card);color:var(--accent);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .daytype{font-weight:700;color:var(--accent)}
+  .ex-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .ex-row:last-child{border-bottom:0}
+  .ex-row .thumb{flex:0 0 64px;height:48px;overflow:hidden;background:var(--bg);border-radius:8px}
+  .ex-row .info{flex:1;min-width:0}
+  .ex-row .name{font-weight:600}
+  .check{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:2px solid var(--line);background:transparent;
+    color:transparent;font-weight:800;cursor:pointer;font-size:1rem}
+  .check.on{background:var(--ok);border-color:var(--ok);color:#fff}
+  .play{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;font-size:.85rem}
   .progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:8px 0 2px}
   .progress > div{height:100%;background:var(--accent);width:0;transition:width .25s}
-  .slider{display:flex;align-items:center;gap:12px}
-  .slider input{flex:1;accent-color:var(--accent)}
-  .score{font-weight:700;font-size:1.3rem;min-width:2.2ch;text-align:right}
-  table{width:100%;border-collapse:collapse;font-size:.92rem}
-  th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{color:var(--muted);font-weight:600}
-  ul.rules{padding-left:20px;margin:6px 0}
-  ul.rules li{margin:4px 0}
-  .tag{font-size:.78rem;font-weight:700;padding:1px 7px;border-radius:99px;background:var(--line);color:var(--muted);vertical-align:middle;margin-left:6px;white-space:nowrap;display:inline-block}
-  .tag.on{background:var(--accent-soft);color:var(--accent)}
-  .btns{display:flex;gap:8px;flex:0 0 auto}
-  .btn.small{padding:6px 12px;font-size:.9rem}
+  .streak{display:flex;align-items:baseline;gap:8px}
+  .streak b{font-size:2rem;line-height:1;color:var(--accent)}
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}
+  .cal .wd{font-size:.75rem;color:var(--muted);text-align:center}
+  .cal .d{aspect-ratio:1;border-radius:8px;background:var(--bg);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted)}
+  .cal .d.full{background:var(--ok);border-color:var(--ok);color:#fff;font-weight:700}
+  .cal .d.part{background:var(--part);border-color:var(--part);color:#fff}
+  .cal .d.today{outline:2px solid var(--accent);outline-offset:1px}
+  .cal .d.empty{visibility:hidden}
+  .legend{display:flex;gap:14px;margin-top:8px;font-size:.8rem;color:var(--muted)}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:middle}
+  .poses{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+  .pose{background:var(--bg);border-radius:10px;padding:6px 6px 4px;text-align:center}
+  .pose svg{width:100%;height:auto;display:block}
+  .pose span{font-size:.8rem;color:var(--muted)}
+  .tag{font-size:.78rem;font-weight:700;padding:1px 8px;border-radius:99px;background:var(--accent-soft);color:var(--accent);white-space:nowrap;display:inline-block;margin-left:6px;vertical-align:middle}
+  details summary{cursor:pointer;color:var(--muted);font-size:.9rem;margin-top:8px}
   .cfg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
   .cfg label{font-size:.85rem;color:var(--muted);display:flex;flex-direction:column;gap:2px}
   .cfg input{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:6px 10px;width:100%}
-  .overlay{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;align-items:center;
-    justify-content:center;gap:10px;padding:24px 20px calc(24px + env(safe-area-inset-bottom));text-align:center}
-  .overlay[hidden]{display:none}
-  .t-top{position:absolute;top:calc(12px + env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between}
-  .t-name{font-size:1.25rem;font-weight:700;max-width:520px}
-  .t-phase{font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
-  .t-phase.rest{color:var(--muted)} .t-phase.prep{color:var(--warn)}
-  .t-big{font-size:6rem;line-height:1;font-weight:800;font-variant-numeric:tabular-nums;margin:6px 0}
-  .t-big.text{font-size:2.6rem}
-  .t-sets{color:var(--muted);font-size:1rem}
-  .t-bar{width:min(420px,90%);height:10px;background:var(--line);border-radius:99px;overflow:hidden}
-  .t-bar > div{height:100%;background:var(--accent);width:0}
-  .t-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
-  .t-controls .btn{min-width:120px;padding:12px 18px;font-size:1.05rem}
-  .t-hint{color:var(--muted);font-size:.85rem;max-width:420px}
+  ul.rules{padding-left:20px;margin:6px 0}
+  ul.rules li{margin:4px 0}
   footer{max-width:760px;margin:0 auto;padding:8px 16px 32px;color:var(--muted);font-size:.82rem}
+
+  /* figure */
+  .f-floor{stroke:var(--line);stroke-width:2}
+  .f-prop{stroke:var(--muted);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .f-propfill{fill:var(--line);stroke:var(--muted);stroke-width:1.5}
+  .f-body{stroke:var(--text);stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .f-arm{stroke:var(--text);stroke-width:4.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .f-head{fill:var(--text)}
+  .f-leg2{stroke:var(--limb2);stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .f-leg1{stroke:var(--accent);stroke-width:6.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .f-tense{stroke:var(--warn);stroke-width:9;fill:none;stroke-linecap:round;opacity:.9}
+
+  /* player */
+  .overlay{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;
+    padding:calc(10px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom))}
+  .overlay[hidden]{display:none}
+  .p-wrap{max-width:520px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+  .p-top{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .p-count{font-size:.9rem;color:var(--muted);font-weight:600}
+  .p-fig{width:min(100%,380px);background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:6px}
+  .p-fig svg{width:100%;height:auto;display:block}
+  .p-name{font-size:1.25rem;font-weight:700;margin-top:4px}
+  .p-phase{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+  .p-phase.rest{color:var(--muted)} .p-phase.prep{color:var(--warn)}
+  .p-big{font-size:4.6rem;line-height:1;font-weight:800;font-variant-numeric:tabular-nums}
+  .p-big.text{font-size:2rem;padding:10px 0}
+  .p-sub{color:var(--muted)}
+  .p-bar{width:100%;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+  .p-bar > div{height:100%;background:var(--accent);width:0}
+  .p-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%;margin-top:8px}
+  .p-controls .btn{padding:12px 6px;font-size:.98rem}
+  .p-desc{text-align:left;width:100%;font-size:.95rem;margin:6px 0 0}
+  .p-desc .caution{margin-top:4px}
+  .p-next{font-size:.9rem;color:var(--muted)}
+  .p-hint{color:var(--muted);font-size:.82rem}
 </style>
 </head>
 <body>
-<header>
-  <h1>Колено — трекер упражнений</h1>
-  <p class="sub">Тендинопатия связки надколенника · хондромаляция надколенника · растяжение ПКС</p>
-</header>
+<header><h1>Колено - тренировки</h1></header>
 
 <nav><div class="wrap" role="tablist">
   <button role="tab" data-tab="today" aria-selected="true">Сегодня</button>
   <button role="tab" data-tab="catalog" aria-selected="false">Упражнения</button>
-  <button role="tab" data-tab="diary" aria-selected="false">Дневник боли</button>
   <button role="tab" data-tab="rules" aria-selected="false">Правила</button>
-  <button role="tab" data-tab="data" aria-selected="false">Данные</button>
 </div></nav>
 
 <main>
-  <!-- СЕГОДНЯ -->
   <section id="tab-today">
-    <div class="card banner"><strong>Не план лечения.</strong> Это справочник по материалам NHS. В «Сегодня» попадают только упражнения, которые ты отметил как одобренные физическим терапевтом. Подходы и повторения — как скажет терапевт.</div>
     <div class="card">
       <h3 id="today-date"></h3>
+      <div class="row" style="margin-top:6px"><div class="seg" id="stage-seg" style="flex:1">
+        <button data-stage="1">Этап 1</button><button data-stage="2">Этап 2</button>
+      </div></div>
+      <p class="muted" id="day-type" style="margin:8px 0 0"></p>
+      <div class="row"><button class="btn big" id="start-all">▶ Начать тренировку</button></div>
       <div class="progress"><div id="today-bar"></div></div>
-      <div class="src" id="today-count"></div>
+      <div class="muted" id="today-count"></div>
       <div id="today-list"></div>
     </div>
-  </section>
-
-  <!-- КАТАЛОГ -->
-  <section id="tab-catalog" hidden>
-    <div id="catalog"></div>
     <div class="card">
-      <h3>Только у специалиста</h3>
-      <p class="how">Мобилизация надколенника и работа на ROM (из твоего плана реабилитации) — это ручные техники терапевта, дома их не повторить.</p>
+      <div class="streak"><b id="streak-n">0</b><span id="streak-t">дней подряд</span></div>
+      <div class="cal" id="cal"></div>
+      <div class="legend"><span><i style="background:var(--ok)"></i>всё сделано</span><span><i style="background:var(--part)"></i>частично</span><span><i style="background:var(--line)"></i>пропуск</span></div>
     </div>
   </section>
 
-  <!-- ДНЕВНИК -->
-  <section id="tab-diary" hidden>
-    <div class="card">
-      <h3>Запись за день</h3>
-      <div class="row"><input type="date" id="d-date" aria-label="Дата"></div>
-      <p class="src" style="margin:12px 0 2px">Боль при спуске по лестнице (0 — нет, 10 — максимум)</p>
-      <div class="slider"><input type="range" id="d-stairs" min="0" max="10" value="0" aria-label="Боль при спуске"><span class="score" id="d-stairs-v">0</span></div>
-      <p class="src" style="margin:12px 0 2px">Боль после долгого сидения</p>
-      <div class="slider"><input type="range" id="d-sit" min="0" max="10" value="0" aria-label="Боль после сидения"><span class="score" id="d-sit-v">0</span></div>
-      <div class="row"><label class="chk"><input type="checkbox" id="d-lock"> Было «заклинивание»</label></div>
-      <div class="row"><input type="text" id="d-note" placeholder="Заметка (что делал, что болело)"></div>
-      <div class="row"><button class="btn" id="d-save">Сохранить</button><span class="src" id="d-msg"></span></div>
-    </div>
-    <div class="card">
-      <h3>Последние записи</h3>
-      <div id="diary-table"></div>
-    </div>
-  </section>
+  <section id="tab-catalog" hidden><div id="catalog"></div></section>
 
-  <!-- ПРАВИЛА -->
   <section id="tab-rules" hidden>
     <div class="card">
       <h3>Боль во время упражнений</h3>
       <ul class="rules">
-        <li>Боль во время упражнения не должна быть больше обычной более чем на 1–2 балла по шкале 0–10.</li>
-        <li>Она должна пройти в течение примерно 30 минут, и на следующий день колено не должно быть хуже.</li>
-        <li>Если стало хуже — в следующий раз меньше повторений или шаг назад к более лёгкому упражнению.</li>
-        <li>Упростить упражнение можно так: меньше амплитуда, меньше повторений, меньше вес, медленнее темп, больше отдых между подходами.</li>
+        <li>Боль во время упражнения не должна быть больше обычной более чем на 1-2 балла по шкале 0-10.</li>
+        <li>Она должна пройти примерно за 30 минут, а на следующий день колено не должно быть хуже.</li>
+        <li>Если стало хуже, в следующий раз сделай меньше повторений или вернись к более лёгкому упражнению.</li>
+        <li>Упростить упражнение можно так: меньше амплитуда, меньше повторений, меньше вес, медленнее темп, больше отдых.</li>
       </ul>
       <p class="src">Источники: <a href="https://wiltshirehealthandcare.nhs.uk/wp-content/uploads/sites/8/2024/08/Patella-Tendinopathy-PIL-100.0.pdf" target="_blank" rel="noopener">Wiltshire Health and Care</a>, <a href="https://newcastle-hospitals.nhs.uk/wp-content/uploads/2021/11/2024-Newcastle-OHS-Anterior-Knee-Pain-leaflet_PRINT_ONLY-1.pdf" target="_blank" rel="noopener">Newcastle Hospitals</a>, <a href="https://www.nhsaaa.net/?p=6505" target="_blank" rel="noopener">NHS Ayrshire &amp; Arran</a></p>
     </div>
     <div class="card">
-      <h3>Логика этапов</h3>
+      <h3>Как устроены этапы</h3>
       <ul class="rules">
-        <li><b>Этап 1 — изометрия</b>: удержание без движения. Старт, когда больно даже на лестнице.</li>
-        <li><b>Этап 2 — изотоника</b>: силовые с движением, когда этап 1 переносится хорошо.</li>
-        <li><b>Этап 3 — «пружинящие»</b>: прыжки и быстрые движения, когда сила и боль заметно улучшились.</li>
+        <li><b>Этап 1, изометрия.</b> Удержание без движения, каждый день. С него начинают, когда колено болит даже на лестнице.</li>
+        <li><b>Этап 2, силовые.</b> Изометрия и баланс каждый день, силовые с движением через день. Переходи, когда этап 1 даётся легко и боль на лестнице заметно меньше.</li>
+        <li>Приложение само чередует силовые и лёгкие дни, отслеживать ничего не нужно.</li>
       </ul>
       <p class="src">Источник: <a href="https://sbuhb.nhs.wales/hospitals/a-z-services/physiotherapy/musculoskeletal-physiotherapy/knee-pain/patella-tendinopathy/" target="_blank" rel="noopener">NHS Swansea Bay</a></p>
     </div>
@@ -176,475 +179,475 @@
       </ul>
     </div>
   </section>
-
-  <!-- ДАННЫЕ -->
-  <section id="tab-data" hidden>
-    <div class="card">
-      <h3>Резервная копия</h3>
-      <p class="how">Все отметки хранятся только в этом браузере на этом устройстве. Скачай копию, чтобы не потерять их или перенести на другой телефон.</p>
-      <div class="row">
-        <button class="btn" id="export">Скачать копию (JSON)</button>
-        <label class="btn ghost" style="display:inline-block">Загрузить копию<input type="file" id="import" accept="application/json" hidden></label>
-      </div>
-      <p class="src" id="data-msg"></p>
-    </div>
-    <div class="card">
-      <h3>Сбросить всё</h3>
-      <div class="row"><button class="btn ghost" id="reset">Удалить все данные на этом устройстве</button></div>
-    </div>
-  </section>
 </main>
 
-<div id="timer" class="overlay" hidden role="dialog" aria-label="Таймер упражнения">
-  <div class="t-top">
-    <button class="btn ghost small" id="t-voice">🔊 Голос: вкл</button>
-    <button class="btn ghost small" id="t-close" aria-label="Закрыть таймер">✕ Стоп</button>
+<div id="player" class="overlay" hidden role="dialog" aria-label="Плеер тренировки">
+  <div class="p-wrap">
+    <div class="p-top">
+      <button class="btn ghost small" id="p-voice">🔊 Голос</button>
+      <span class="p-count" id="p-count"></span>
+      <button class="btn ghost small" id="p-close">✕</button>
+    </div>
+    <div class="p-fig"><svg id="p-svg" viewBox="0 -22 200 150" aria-hidden="true"></svg></div>
+    <div class="p-name" id="p-name"></div>
+    <div class="p-phase" id="p-phase"></div>
+    <div class="p-big" id="p-big"></div>
+    <div class="p-sub" id="p-sub"></div>
+    <div class="p-bar"><div id="p-bar"></div></div>
+    <div class="p-controls">
+      <button class="btn ghost" id="p-pause">Пауза</button>
+      <button class="btn ghost" id="p-skip">Дальше</button>
+      <button class="btn" id="p-nextex">След. ▶▶</button>
+    </div>
+    <div class="p-next" id="p-next"></div>
+    <div class="p-desc" id="p-desc"></div>
+    <div class="p-hint" id="p-hint"></div>
   </div>
-  <div class="t-name" id="t-name"></div>
-  <div class="t-phase" id="t-phase"></div>
-  <div class="t-big" id="t-big"></div>
-  <div class="t-bar"><div id="t-bar"></div></div>
-  <div class="t-sets" id="t-sets"></div>
-  <div class="t-controls">
-    <button class="btn" id="t-done" hidden>Готово</button>
-    <button class="btn ghost" id="t-pause">Пауза</button>
-    <button class="btn ghost" id="t-skip">Пропустить</button>
-  </div>
-  <p class="t-hint" id="t-hint"></p>
 </div>
 
-<footer>Упражнения взяты из открытых материалов NHS для пациентов. Страница не заменяет назначения врача или физического терапевта.</footer>
+<footer>Упражнения по открытым материалам NHS для пациентов.</footer>
 
 <script>
 (function(){
   "use strict";
 
   var SRC = {
-    swansea: ["NHS Swansea Bay — тендинопатия надколенника","https://sbuhb.nhs.wales/hospitals/a-z-services/physiotherapy/musculoskeletal-physiotherapy/knee-pain/patella-tendinopathy/"],
-    ayrshire: ["NHS Ayrshire & Arran — тендинопатия надколенника","https://www.nhsaaa.net/?p=6505"],
-    leeds: ["Leeds NHS — тендинопатия надколенника","https://leedscommunityhealthcare.nhs.uk/our-services-a-z/musculoskeletal-msk/knee-problems/known-diagnosed-knee-problems/patella-tendonopathy"],
-    wilts: ["Wiltshire Health and Care — брошюра (PDF)","https://wiltshirehealthandcare.nhs.uk/wp-content/uploads/sites/8/2024/08/Patella-Tendinopathy-PIL-100.0.pdf"],
-    ruhT: ["RUH Bath — тендинопатия надколенника (PDF)","https://www.ruh.nhs.uk/patients/services/physiotherapy/documents/Patellar_Tendinopathy.pdf"],
-    ruhP: ["RUH Bath — пателлофеморальная боль (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY027_Patellofemoral_pain.pdf"],
-    ruhA: ["RUH Bath — буклет по ПКС (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY034_ACL_prehab_booklet.pdf"],
-    cuh: ["Cambridge University Hospitals — передняя боль в колене","https://cuh.nhs.uk/patient-information/patello-femoral-syndrome-anterior-knee-pain-or-chondromalacia-patella"],
-    lanark: ["NHS Lanarkshire — пателлофеморальная боль (8 видео по этапам)","https://www.nhslanarkshire.scot.nhs.uk/?p=27401"]
+    swansea:["NHS Swansea Bay","https://sbuhb.nhs.wales/hospitals/a-z-services/physiotherapy/musculoskeletal-physiotherapy/knee-pain/patella-tendinopathy/"],
+    ayrshire:["NHS Ayrshire & Arran","https://www.nhsaaa.net/?p=6505"],
+    leeds:["Leeds NHS","https://leedscommunityhealthcare.nhs.uk/our-services-a-z/musculoskeletal-msk/knee-problems/known-diagnosed-knee-problems/patella-tendonopathy"],
+    wilts:["Wiltshire Health and Care (PDF)","https://wiltshirehealthandcare.nhs.uk/wp-content/uploads/sites/8/2024/08/Patella-Tendinopathy-PIL-100.0.pdf"],
+    ruhT:["RUH Bath, тендинопатия (PDF)","https://www.ruh.nhs.uk/patients/services/physiotherapy/documents/Patellar_Tendinopathy.pdf"],
+    ruhP:["RUH Bath, боль в колене (PDF)","https://www.ruh.nhs.uk/patients/patient_information/PHY027_Patellofemoral_pain.pdf"],
+    ruhA:["RUH Bath, ПКС (PDF)","https://www.ruh.nhs.uk/patients/patient_information/PHY034_ACL_prehab_booklet.pdf"],
+    cuh:["Cambridge University Hospitals","https://cuh.nhs.uk/patient-information/patello-femoral-syndrome-anterior-knee-pain-or-chondromalacia-patella"],
+    lanark:["NHS Lanarkshire","https://www.nhslanarkshire.scot.nhs.uk/?p=27401"]
   };
 
-  var STAGES = [
-    {id:1, title:"Этап 1 — изометрия", note:"Удержание без движения. С него начинают, когда колено болит даже на лестнице."},
-    {id:2, title:"Этап 2 — изотоника", note:"Силовые с движением. В NHS Swansea Bay: 3–4 подхода, вес от 15ПМ постепенно до 6ПМ, через день. ПМ — повторный максимум, вес, с которым получается ровно столько повторений."},
-    {id:3, title:"Этап 3 — «пружинящие» нагрузки", note:"Прыжки и быстрые движения. Только когда сила и боль заметно улучшились и терапевт дал добро."}
-  ];
-
-  var EX = [
-    {id:"qset", cfg:{sets:10,hold:10,reps:0,rest:10}, stage:1, name:"Напряжение квадрицепса сидя",
-     how:"Сядь на пол или кровать, больная нога вытянута, вторая согнута. Напряги мышцы передней поверхности бедра, прижимая колено вниз, подержи и расслабь.",
-     params:"По NHS Ayrshire: 3 раза в день", src:["ayrshire"]},
-    {id:"isoext", cfg:{sets:5,hold:45,reps:0,rest:60}, stage:1, name:"Изометрическое разгибание колена",
-     how:"Сидя, упрись голенью в неподвижную опору или в закреплённую резинку и дави так, будто разгибаешь колено, но без движения.",
-     params:"5 × 30–45 с, ежедневно", src:["wilts","swansea"]},
-    {id:"wallsit", cfg:{sets:5,hold:45,reps:0,rest:90}, stage:1, name:"«Стульчик» у стены",
-     how:"Встань спиной к стене и съедь вниз, пока колени не согнутся примерно на 70°. Держи позицию.",
-     params:"5 × 30–45 с, отдых 1–2 мин, 3–5 раз в день",
-     caution:"При хондромаляции глубина сгибания важна — угол уточни у терапевта.", src:["leeds"]},
-    {id:"slr", cfg:{sets:3,hold:0,reps:10,rest:60}, stage:1, name:"Подъём прямой ноги",
-     how:"Лёжа на спине, вытяни ногу. Напряги бедро, подними прямую ногу примерно на 15 см и медленно опусти.",
-     params:"3 × 10", src:["ruhP"]},
-    {id:"quadiso", cfg:{sets:3,hold:0,reps:15,rest:90}, stage:2, name:"Силовое на квадрицепс",
-     how:"Разгибание ног в тренажёре, жим ногами или их вариант с резинкой — конкретное упражнение и амплитуду выбирает терапевт.",
-     params:"3–4 подхода, 15ПМ → 6ПМ, через день", src:["swansea","ruhT"]},
-    {id:"stepup", cfg:{sets:3,hold:0,reps:10,rest:90}, stage:2, name:"Зашагивание на ступеньку (step-up)",
-     how:"Встань лицом к ступеньке, больная нога на ступеньке. Поднимись, перенося вес на неё, и медленно опустись.",
-     params:"По указанию терапевта", src:["cuh","ruhP"]},
-    {id:"hip", cfg:{sets:3,hold:0,reps:15,rest:60}, stage:2, name:"Мышцы таза и бедра",
-     how:"Например, отведение ноги лёжа на боку. По NHS Lanarkshire, сочетание упражнений для бедра и колена работает лучше, чем только для колена.",
-     params:"По указанию терапевта", src:["lanark"]},
-    {id:"acl", cfg:{sets:3,hold:0,reps:10,rest:60}, stage:2, name:"Стабильность колена (с учётом ПКС)",
-     how:"Упражнения на контроль и стабильность колена. Подбирает терапевт с учётом растяжения ПКС.",
-     params:"По указанию терапевта", src:["ruhA"]},
-    {id:"energy", cfg:{sets:3,hold:0,reps:10,rest:90}, stage:3, name:"Прыжковые упражнения",
-     how:"Сначала постепенно увеличивают объём, потом интенсивность. Только с разрешения терапевта.",
-     params:"По указанию терапевта", src:["swansea","ruhT"]}
-  ];
+  // Poses: joints head, neck, hip, elbow, hand, k1 a1 t1 (working leg), k2 a2 t2 (other leg).
+  // Floor at y=125. E overrides only joints that move.
+  var CHAIR_S = {head:[72,22],neck:[74,36],hip:[76,80],elbow:[84,57],hand:[96,74],k1:[111,80],a1:[113,119],t1:[123,123],k2:[108,82],a2:[108,120],t2:[118,124]};
+  var EX = {
+    qset:{name:"Напряжение квадрицепса", stage:1, iso:true,
+      how:"Сядь на пол, больная нога вытянута, под коленом валик из полотенца. Вторая нога согнута. Напряги мышцы передней поверхности бедра и вдави колено в валик. Держи, затем расслабь.",
+      cfg:{sets:10,hold:10,reps:0,rest:5}, labels:["Расслаблено","Бедро напряжено"], props:["floor","towel"], src:["ayrshire"],
+      S:{head:[57,66],neck:[63,79],hip:[72,121],elbow:[56,100],hand:[50,121],k1:[106,116],a1:[140,121],t1:[146,111],k2:[94,93],a2:[112,121],t2:[122,121]},
+      E:{k1:[106,118.5],a1:[140,117],t1:[147,107]}},
+    isoext:{name:"Изометрическое разгибание колена", stage:1, iso:true,
+      how:"Сядь на стул, колено согнуто примерно под прямым углом. Упрись передней частью голени в неподвижную опору: ножку стола или закреплённую резинку. Дави вперёд, будто разгибаешь колено, но нога не двигается.",
+      cfg:{sets:5,hold:45,reps:0,rest:60}, labels:["Исходное","Давление вперёд"], props:["floor","chair","pad"], src:["wilts","swansea"],
+      S:CHAIR_S, E:{}},
+    wallsit:{name:"«Стульчик» у стены", stage:1, iso:true,
+      how:"Встань спиной к стене, стопы на ширине плеч примерно в шаге от неё. Съедь вниз, пока колени не согнутся примерно на 70°, спина прижата к стене. Колени смотрят вперёд и не заваливаются внутрь.",
+      caution:"Не опускайся глубже: глубокое сгибание сильнее нагружает надколенник.",
+      cfg:{sets:5,hold:45,reps:0,rest:90}, labels:["Исходное","Удержание"], props:["floor","wall"], src:["leeds"],
+      S:{head:[50,-4],neck:[50,10],hip:[51,55],elbow:[50,32],hand:[52,52],k1:[66,88],a1:[80,120],t1:[90,124],k2:[64,88],a2:[77,120],t2:[87,124]},
+      E:{head:[49,30],neck:[49,44],hip:[52,90],elbow:[55,64],hand:[63,82],k1:[84,92],k2:[82,93]}},
+    slr:{name:"Подъём прямой ноги", stage:1, tempo:[1.5,1,1.5],
+      how:"Ляг на спину, здоровая нога согнута, больная прямая. Напряги бедро, подними прямую ногу примерно на 15 см, задержись и медленно опусти.",
+      cfg:{sets:3,hold:0,reps:10,rest:60}, labels:["Нижняя точка","Верхняя точка"], props:["floor"], src:["ruhP"],
+      S:{head:[24,111],neck:[37,116],hip:[82,119],elbow:[58,119],hand:[74,121],k1:[117,120],a1:[152,121],t1:[157,112],k2:[104,96],a2:[121,121],t2:[131,123]},
+      E:{k1:[116,111],a1:[150,101],t1:[156,93]}},
+    legext:{name:"Разгибание ноги сидя", stage:2, tempo:[1.5,0.5,2],
+      how:"Сядь на стул, на щиколотку можно надеть утяжелитель. Медленно разогни колено до прямой ноги, задержись и медленно опусти. Вес подбирай так, чтобы последние повторения давались тяжело.",
+      cfg:{sets:3,hold:0,reps:12,rest:90}, labels:["Нижняя точка","Верхняя точка"], props:["floor","chair","weight"], src:["swansea","ruhT"],
+      S:CHAIR_S, E:{a1:[146,78],t1:[150,68]}},
+    stepup:{name:"Зашагивание на ступеньку", stage:2, tempo:[1.5,0.5,2],
+      how:"Встань перед ступенькой, больную ногу поставь на неё. Перенеси на неё вес и поднимись, выпрямляя ногу. Медленно опустись обратно. Колено идёт над стопой и не уходит внутрь.",
+      cfg:{sets:3,hold:0,reps:10,rest:90}, labels:["Нижняя точка","Верхняя точка"], props:["floor","step"], src:["cuh","ruhP"],
+      S:{head:[74,15],neck:[75,29],hip:[74,74],elbow:[77,51],hand:[80,71],k1:[100,78],a1:[108,104],t1:[118,104],k2:[73,99],a2:[70,120],t2:[80,124]},
+      E:{head:[110,-4],neck:[110,10],hip:[112,55],elbow:[111,32],hand:[113,52],k1:[114,80],a1:[112,104],t1:[122,104],k2:[105,82],a2:[100,103],t2:[108,106]}},
+    hip:{name:"Отведение ноги лёжа на боку", stage:2, tempo:[1.5,0.5,1.5],
+      how:"Ляг на бок, ноги прямые, голова на руке. Подними верхнюю ногу вверх, носок смотрит вперёд, и медленно опусти. Таз не заваливай назад. Делай на обе стороны.",
+      cfg:{sets:3,hold:0,reps:12,rest:60}, labels:["Нижняя точка","Верхняя точка"], props:["floor"], src:["lanark"],
+      S:{head:[24,106],neck:[37,111],hip:[85,113],elbow:[30,121],hand:[20,108],k1:[120,113],a1:[155,116],t1:[158,109],k2:[119,118],a2:[154,121],t2:[157,114]},
+      E:{k1:[118,99],a1:[150,85],t1:[154,78]}},
+    balance:{name:"Стойка на одной ноге", stage:2, iso:true,
+      how:"Встань на больную ногу, вторую согни назад. Держи равновесие, колено чуть мягкое и не заваливается внутрь. Для страховки можно держаться рукой за стену.",
+      cfg:{sets:3,hold:30,reps:0,rest:30}, labels:["Исходное","На одной ноге"], props:["floor"], src:["lanark","ruhA"],
+      S:{head:[100,-4],neck:[100,10],hip:[100,55],elbow:[96,32],hand:[96,52],k1:[101,90],a1:[102,120],t1:[112,124],k2:[98,90],a2:[98,120],t2:[108,124]},
+      E:{elbow:[88,30],hand:[78,42],k2:[99,90],a2:[78,96],t2:[73,88]}}
+  };
+  var ORDER = ["qset","isoext","wallsit","slr","legext","stepup","hip","balance"];
 
   // ---------- storage ----------
-  var KEY = "knee-rehab-v1";
-  var mem = {approved:{}, notes:{}, log:{}, diary:{}, cfg:{}, settings:{voice:true}};
-  function load(){
-    try{ var raw = localStorage.getItem(KEY); if(raw){ var d = JSON.parse(raw); mem = normalize(d); } }catch(e){}
-  }
-  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(mem)); }catch(e){} }
+  var KEY="knee-rehab-v1";
+  var mem={stage:1, cfg:{}, log:{}, settings:{voice:true}};
   function normalize(d){
-    d = d && typeof d === "object" ? d : {};
-    return {approved:d.approved||{}, notes:d.notes||{}, log:d.log||{}, diary:d.diary||{}, cfg:d.cfg||{}, settings:Object.assign({voice:true}, d.settings||{})};
+    d = d && typeof d==="object" ? d : {};
+    return {stage:d.stage===2?2:1, cfg:d.cfg||{}, log:d.log||{}, settings:Object.assign({voice:true}, d.settings||{})};
+  }
+  function load(){ try{ var r=localStorage.getItem(KEY); if(r) mem=normalize(JSON.parse(r)); }catch(e){} }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(mem)); }catch(e){} }
+
+  // ---------- dates and plan ----------
+  var DAY=864e5;
+  function pad(n){ return (n<10?"0":"")+n; }
+  function keyOf(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+  function dateOf(k){ var p=k.split("-"); return new Date(+p[0],+p[1]-1,+p[2]); }
+  function dayNum(d){ return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/DAY); }
+  function strengthDay(d){ return dayNum(d)%2===0; }
+  function planFor(d){
+    if(mem.stage!==2) return ["qset","isoext","wallsit","slr"];
+    return strengthDay(d) ? ["isoext","wallsit","legext","stepup","hip","balance"] : ["isoext","wallsit","balance"];
+  }
+  function entry(k){
+    var v=mem.log[k];
+    if(Array.isArray(v)) v={done:v.slice(), total:0};
+    return v || {done:[], total:0};
+  }
+  function setDone(id, on){
+    var now=new Date(), k=keyOf(now), e=entry(k), i=e.done.indexOf(id);
+    if(on && i<0) e.done.push(id);
+    if(!on && i>-1) e.done.splice(i,1);
+    e.total=planFor(now).length; mem.log[k]=e; save();
+  }
+  function status(k){
+    var e=entry(k), plan=planFor(dateOf(k));
+    var n=e.done.length;
+    if(!n) return "none";
+    var total=e.total||plan.length;
+    return n>=total ? "full" : "part";
   }
 
   // ---------- helpers ----------
-  function pad(n){ return (n<10?"0":"")+n; }
-  function todayKey(){ var d=new Date(); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
-  function fmt(k){ var p=k.split("-"); return p[2]+"."+p[1]+"."+p[0]; }
-  function el(tag, attrs, children){
+  function el(tag, attrs, kids){
     var n=document.createElement(tag);
     if(attrs) for(var a in attrs){ if(a==="text") n.textContent=attrs[a]; else if(a==="html") n.innerHTML=attrs[a]; else n.setAttribute(a,attrs[a]); }
-    (children||[]).forEach(function(c){ if(c) n.appendChild(c); });
+    (kids||[]).forEach(function(c){ if(c) n.appendChild(c); });
     return n;
   }
-  function getCfg(e){ return Object.assign({}, e.cfg, mem.cfg[e.id]||{}); }
-  function cfgText(e){
-    var c=getCfg(e);
-    var work = c.hold>0 ? (c.hold+" с удержание") : (c.reps+" повт.");
-    return "Таймер: "+c.sets+" × "+work+(c.sets>1 && c.rest>0 ? ", отдых "+c.rest+" с" : "");
+  function plural(n,one,few,many){ var a=n%10,b=n%100; if(a===1&&b!==11) return one; if(a>=2&&a<=4&&(b<12||b>14)) return few; return many; }
+  function getCfg(id){ return Object.assign({}, EX[id].cfg, mem.cfg[id]||{}); }
+  function tempo(id){ return EX[id].tempo || [1.5,0.5,1.5]; }
+  function cycle(id){ var t=tempo(id); return t[0]+t[1]+t[2]; }
+  function cfgText(id){
+    var c=getCfg(id);
+    var w = c.hold>0 ? (c.hold+" с") : (c.reps+" повт.");
+    return c.sets+" × "+w+(c.sets>1&&c.rest>0 ? ", отдых "+c.rest+" с" : "");
   }
-  function srcLinks(keys){
-    var p=el("p",{"class":"src"}); p.appendChild(document.createTextNode("Источник: "));
-    keys.forEach(function(k,i){
-      if(i) p.appendChild(document.createTextNode(" · "));
-      p.appendChild(el("a",{href:SRC[k][1],target:"_blank",rel:"noopener",text:SRC[k][0]}));
-    });
-    return p;
+  function exSeconds(id, first){
+    var c=getCfg(id), work = c.hold>0 ? c.hold : c.reps*cycle(id);
+    return (first?5:10) + c.sets*work + Math.max(0,c.sets-1)*c.rest;
   }
 
+  // ---------- figure ----------
+  function lerp(a,b,k){ return [a[0]+(b[0]-a[0])*k, a[1]+(b[1]-a[1])*k]; }
+  function poseAt(id,k){
+    var ex=EX[id], p={};
+    for(var j in ex.S){ p[j] = lerp(ex.S[j], (ex.E[j]||ex.S[j]), k); }
+    return p;
+  }
+  function pts(){ return Array.prototype.map.call(arguments,function(q){ return q[0].toFixed(1)+","+q[1].toFixed(1); }).join(" "); }
+  function figInner(id, k, tense){
+    var ex=EX[id], p=poseAt(id,k), s="";
+    ex.props.forEach(function(pr){
+      if(pr==="floor") s+='<line class="f-floor" x1="-100" y1="125.5" x2="300" y2="125.5"/>';
+      if(pr==="wall") s+='<line class="f-prop" x1="40" y1="-60" x2="40" y2="125" style="stroke-width:4"/>';
+      if(pr==="chair") s+='<path class="f-prop" d="M55 84 H96 M58 84 V124 M93 84 V124 M57 84 V42"/>';
+      if(pr==="step") s+='<rect class="f-propfill" x="98" y="105" width="50" height="20" rx="2"/>';
+      if(pr==="towel") s+='<ellipse class="f-propfill" cx="106" cy="121.5" rx="7" ry="3.5"/>';
+      if(pr==="pad") s+='<rect class="f-propfill" x="116.5" y="96" width="7" height="16" rx="2"/>';
+    });
+    s+='<polyline class="f-leg2" points="'+pts(p.hip,p.k2,p.a2,p.t2)+'"/>';
+    s+='<line class="f-body" x1="'+p.hip[0]+'" y1="'+p.hip[1]+'" x2="'+p.neck[0]+'" y2="'+p.neck[1]+'"/>';
+    s+='<polyline class="f-arm" points="'+pts(p.neck,p.elbow,p.hand)+'"/>';
+    s+='<circle class="f-head" cx="'+p.head[0]+'" cy="'+p.head[1]+'" r="8.5"/>';
+    s+='<polyline class="f-leg1" points="'+pts(p.hip,p.k1,p.a1,p.t1)+'"/>';
+    if(tense) s+='<line class="f-tense" x1="'+p.hip[0]+'" y1="'+p.hip[1]+'" x2="'+p.k1[0]+'" y2="'+p.k1[1]+'"/>';
+    if(ex.props.indexOf("weight")>-1) s+='<rect class="f-propfill" x="'+(p.a1[0]-4.5)+'" y="'+(p.a1[1]-4.5)+'" width="9" height="9" rx="2"/>';
+    return s;
+  }
+  var VB={};
+  function viewBox(id){
+    if(VB[id]) return VB[id];
+    var ex=EX[id], x0=1e9,y0=1e9,x1=-1e9,y1=128;
+    [ex.S, Object.assign({},ex.S,ex.E)].forEach(function(P){ for(var j in P){ var r=j==="head"?11:5; x0=Math.min(x0,P[j][0]-r); x1=Math.max(x1,P[j][0]+r); y0=Math.min(y0,P[j][1]-r); } });
+    if(ex.props.indexOf("chair")>-1){ x0=Math.min(x0,52); y0=Math.min(y0,40); }
+    if(ex.props.indexOf("step")>-1){ x1=Math.max(x1,150); }
+    if(ex.props.indexOf("wall")>-1){ x0=Math.min(x0,36); }
+    x0-=10; x1+=10; y0-=8;
+    var w=x1-x0, h=y1-y0;
+    if(w/h>2){ var nh=w/2; y0-=(nh-h); h=nh; } else if(w/h<1.15){ var nw=h*1.15; x0-=(nw-w)/2; w=nw; }
+    VB[id]=[x0,y0,w,h].map(function(v){return v.toFixed(1);}).join(" ");
+    return VB[id];
+  }
+  function figSVG(id,k,tense){ return '<svg viewBox="'+viewBox(id)+'" aria-hidden="true">'+figInner(id,k,tense)+'</svg>'; }
+  function ease(x){ return x<0?0:x>1?1:x*x*(3-2*x); }
+
   // ---------- tabs ----------
-  var tabs = document.querySelectorAll("nav button");
+  var tabs=document.querySelectorAll("nav button");
   tabs.forEach(function(b){
-    b.addEventListener("click", function(){
-      tabs.forEach(function(x){ x.setAttribute("aria-selected", x===b ? "true":"false"); });
-      document.querySelectorAll("main > section").forEach(function(s){ s.hidden = s.id !== "tab-"+b.dataset.tab; });
+    b.addEventListener("click",function(){
+      tabs.forEach(function(x){ x.setAttribute("aria-selected", x===b?"true":"false"); });
+      document.querySelectorAll("main > section").forEach(function(s){ s.hidden = s.id!=="tab-"+b.dataset.tab; });
       if(b.dataset.tab==="today") renderToday();
-      if(b.dataset.tab==="diary") renderDiary();
       window.scrollTo(0,0);
     });
   });
 
+  // ---------- today ----------
+  document.querySelectorAll("#stage-seg button").forEach(function(b){
+    b.addEventListener("click",function(){ mem.stage=+b.dataset.stage; save(); renderToday(); });
+  });
+  document.getElementById("start-all").addEventListener("click",function(){
+    var plan=planFor(new Date()), done=entry(keyOf(new Date())).done;
+    var rest=plan.filter(function(id){ return done.indexOf(id)<0; });
+    Player.start(rest.length?rest:plan);
+  });
+
+  function renderToday(){
+    var now=new Date(), k=keyOf(now), plan=planFor(now), done=entry(k).done;
+    document.getElementById("today-date").textContent=now.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"});
+    document.querySelectorAll("#stage-seg button").forEach(function(b){ b.className = (+b.dataset.stage===mem.stage)?"on":""; });
+    var mins=Math.round(plan.reduce(function(s,id,i){ return s+exSeconds(id,i===0); },0)/60);
+    var dt=document.getElementById("day-type");
+    dt.innerHTML = (mem.stage===2 ? '<span class="daytype">'+(strengthDay(now)?"Силовой день":"Лёгкий день")+'</span> · ' : "")
+      + plan.length+" "+plural(plan.length,"упражнение","упражнения","упражнений")+" · ~"+mins+" мин";
+    var list=document.getElementById("today-list"); list.innerHTML="";
+    plan.forEach(function(id,i){
+      var isDone=done.indexOf(id)>-1;
+      var thumb=el("div",{"class":"thumb",html:figSVG(id,1,EX[id].iso)});
+      var chk=el("button",{"class":"check"+(isDone?" on":""),text:"✓","aria-label":(isDone?"Снять отметку: ":"Отметить: ")+EX[id].name});
+      chk.addEventListener("click",function(){ setDone(id,!isDone); renderToday(); });
+      var play=el("button",{"class":"play",text:"▶","aria-label":"Начать с упражнения: "+EX[id].name});
+      play.addEventListener("click",function(){ Player.start(plan.slice(i)); });
+      list.appendChild(el("div",{"class":"ex-row"},[thumb, el("div",{"class":"info"},[
+        el("div",{"class":"name",text:EX[id].name}), el("div",{"class":"muted",text:cfgText(id)})
+      ]), play, chk]));
+    });
+    var n=plan.filter(function(id){ return done.indexOf(id)>-1; }).length;
+    document.getElementById("today-bar").style.width=Math.round(n/plan.length*100)+"%";
+    document.getElementById("today-count").textContent = n>=plan.length ? "На сегодня всё сделано" : ("Сделано "+n+" из "+plan.length);
+    var sb=document.getElementById("start-all");
+    sb.textContent = n>=plan.length ? "▶ Повторить тренировку" : (n>0 ? "▶ Продолжить тренировку" : "▶ Начать тренировку");
+    renderDiary();
+  }
+
+  function renderDiary(){
+    var today=new Date(); today.setHours(0,0,0,0);
+    // streak
+    var s=0, d=new Date(today);
+    if(status(keyOf(d))!=="full") d=new Date(d.getTime()-DAY);
+    while(status(keyOf(d))==="full"){ s++; d=new Date(d.getFullYear(),d.getMonth(),d.getDate()-1); }
+    document.getElementById("streak-n").textContent=s;
+    document.getElementById("streak-t").textContent=plural(s,"день","дня","дней")+" подряд";
+    // calendar: 4 full weeks ending this week
+    var cal=document.getElementById("cal"); cal.innerHTML="";
+    ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].forEach(function(w){ cal.appendChild(el("div",{"class":"wd",text:w})); });
+    var wd=(today.getDay()+6)%7;
+    var start=new Date(today.getFullYear(),today.getMonth(),today.getDate()-wd-21);
+    for(var i=0;i<28;i++){
+      var c=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i), k=keyOf(c);
+      var cls="d";
+      if(c>today) cls+=" empty";
+      else { var st=status(k); if(st==="full") cls+=" full"; else if(st==="part") cls+=" part"; }
+      if(k===keyOf(today)) cls+=" today";
+      cal.appendChild(el("div",{"class":cls,text:String(c.getDate())}));
+    }
+  }
+
   // ---------- catalog ----------
+  function srcLinks(keys){
+    var p=el("p",{"class":"src"}); p.appendChild(document.createTextNode("Источник: "));
+    keys.forEach(function(k,i){ if(i) p.appendChild(document.createTextNode(" · ")); p.appendChild(el("a",{href:SRC[k][1],target:"_blank",rel:"noopener",text:SRC[k][0]})); });
+    return p;
+  }
   function renderCatalog(){
     var root=document.getElementById("catalog"); root.innerHTML="";
-    STAGES.forEach(function(st){
-      root.appendChild(el("h2",{text:st.title}));
-      root.appendChild(el("p",{"class":"stage-note",text:st.note}));
-      EX.filter(function(e){return e.stage===st.id;}).forEach(function(e){
-        var chk=el("input",{type:"checkbox"}); chk.checked=!!mem.approved[e.id];
-        var tag=el("span",{"class":"tag"+(chk.checked?" on":""),text:chk.checked?"одобрено":"не одобрено"});
-        chk.addEventListener("change",function(){
-          mem.approved[e.id]=chk.checked; save();
-          tag.className="tag"+(chk.checked?" on":""); tag.textContent=chk.checked?"одобрено":"не одобрено";
-        });
-        var ta=el("textarea",{placeholder:"Подходы, повторения, угол, поправки по технике…"});
-        ta.value=mem.notes[e.id]||"";
-        ta.addEventListener("input",function(){ mem.notes[e.id]=ta.value; save(); });
-        var det=el("details",null,[el("summary",{text:"Указания терапевта"}),ta]);
-        if(ta.value) det.open=true;
-        var c=getCfg(e), grid=el("div",{"class":"cfg"});
-        [["sets","Подходы",1,30],["hold","Удержание, с (0 — на повторы)",0,600],["reps","Повторы в подходе",0,100],["rest","Отдых, с",0,600]].forEach(function(f){
-          var inp=el("input",{type:"number",min:String(f[2]),max:String(f[3]),inputmode:"numeric"});
-          inp.value=c[f[0]];
+    [1,2].forEach(function(st){
+      root.appendChild(el("h2",{text: st===1 ? "Этап 1, изометрия" : "Этап 2, силовые"}));
+      ORDER.filter(function(id){ return EX[id].stage===st; }).forEach(function(id){
+        var ex=EX[id];
+        var sched = st===1 ? "каждый день" : (["isoext","wallsit","balance"].indexOf(id)>-1 ? "каждый день" : "через день");
+        if(st===1 && ["isoext","wallsit"].indexOf(id)>-1) sched="каждый день, на этапе 2 тоже";
+        var poses=el("div",{"class":"poses"},[
+          el("div",{"class":"pose",html:figSVG(id,0,false)+"<span>"+ex.labels[0]+"</span>"}),
+          el("div",{"class":"pose",html:figSVG(id,1,ex.iso)+"<span>"+ex.labels[1]+"</span>"})
+        ]);
+        var sum=el("span",{"class":"params",text:cfgText(id)});
+        var grid=el("div",{"class":"cfg"}), c=getCfg(id);
+        [["sets","Подходы",1,30],["hold","Удержание, с (0 = на повторы)",0,600],["reps","Повторы",0,100],["rest","Отдых, с",0,600]].forEach(function(f){
+          var inp=el("input",{type:"number",min:String(f[2]),max:String(f[3]),inputmode:"numeric"}); inp.value=c[f[0]];
           inp.addEventListener("change",function(){
             var v=Math.max(f[2],Math.min(f[3],parseInt(inp.value,10)||0)); inp.value=v;
-            mem.cfg[e.id]=Object.assign({},mem.cfg[e.id]||{}); mem.cfg[e.id][f[0]]=v; save();
-            sum.textContent=cfgText(e);
+            mem.cfg[id]=Object.assign({},mem.cfg[id]||{}); mem.cfg[id][f[0]]=v; save(); sum.textContent=cfgText(id);
           });
           grid.appendChild(el("label",null,[document.createTextNode(f[1]),inp]));
         });
-        var sum=el("p",{"class":"src",text:cfgText(e)});
-        var tdet=el("details",null,[el("summary",{text:"Таймер (по умолчанию — правь под терапевта)"}),sum,grid]);
+        var tryBtn=el("button",{"class":"btn ghost small",text:"▶ Попробовать"});
+        tryBtn.addEventListener("click",function(){ Player.start([id]); });
         root.appendChild(el("div",{"class":"card"},[
-          el("h3",null,[document.createTextNode(e.name),tag]),
-          el("span",{"class":"params",text:e.params}),
-          el("p",{"class":"how",text:e.how}),
-          e.caution ? el("p",{"class":"caution",text:"⚠ "+e.caution}) : null,
-          srcLinks(e.src),
-          el("div",{"class":"row"},[el("label",{"class":"chk"},[chk,document.createTextNode("Одобрено терапевтом")])]),
-          tdet,
-          det
+          el("h3",null,[document.createTextNode(ex.name), el("span",{"class":"tag",text:sched})]),
+          poses, sum,
+          el("p",{"class":"how",text:ex.how}),
+          ex.caution ? el("p",{"class":"caution",text:"⚠ "+ex.caution}) : null,
+          srcLinks(ex.src),
+          el("div",{"class":"row"},[tryBtn]),
+          el("details",null,[el("summary",{text:"Настроить подходы и время"}),grid])
         ]));
       });
     });
   }
 
-  // ---------- today ----------
-  function renderToday(){
-    var k=todayKey();
-    var dt=new Date();
-    document.getElementById("today-date").textContent = dt.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"});
-    var list=document.getElementById("today-list"); list.innerHTML="";
-    var approved=EX.filter(function(e){return mem.approved[e.id];});
-    var done=(mem.log[k]||[]);
-    if(!approved.length){
-      list.appendChild(el("p",{"class":"empty",text:"Пока пусто. Открой «Упражнения» и отметь те, что одобрил терапевт."}));
-    }
-    approved.forEach(function(e){
-      var isDone=done.indexOf(e.id)>-1;
-      var btn=el("button",{"class":isDone?"btn ghost":"btn",text:isDone?"Отменить":"Сделал"});
-      btn.addEventListener("click",function(){
-        var arr=mem.log[k]||[]; var i=arr.indexOf(e.id);
-        if(i>-1) arr.splice(i,1); else arr.push(e.id);
-        mem.log[k]=arr; save(); renderToday();
-      });
-      btn.className += " small";
-      var start=el("button",{"class":"btn small",text:"▶ Старт","aria-label":"Запустить таймер: "+e.name});
-      start.addEventListener("click",function(){ Timer.start(e); });
-      if(isDone) start.className="btn ghost small";
-      list.appendChild(el("div",{"class":"today-item"},[
-        el("div",null,[
-          el("div",null,[document.createTextNode(e.name+" "), isDone?el("span",{"class":"done",text:"✓"}):null]),
-          el("div",{"class":"meta",text:cfgText(e)}),
-          mem.notes[e.id] ? el("div",{"class":"meta",text:"Терапевт: "+mem.notes[e.id]}) : null
-        ]),
-        el("div",{"class":"btns"},[start,btn])
-      ]));
-    });
-    var n=approved.filter(function(e){return done.indexOf(e.id)>-1;}).length;
-    document.getElementById("today-bar").style.width = approved.length ? Math.round(n/approved.length*100)+"%" : "0";
-    document.getElementById("today-count").textContent = approved.length ? ("Сделано "+n+" из "+approved.length) : "";
-  }
-
-  // ---------- diary ----------
-  var dDate=document.getElementById("d-date"), dStairs=document.getElementById("d-stairs"),
-      dSit=document.getElementById("d-sit"), dLock=document.getElementById("d-lock"), dNote=document.getElementById("d-note");
-  function bindSlider(inp,out){ inp.addEventListener("input",function(){ document.getElementById(out).textContent=inp.value; }); }
-  bindSlider(dStairs,"d-stairs-v"); bindSlider(dSit,"d-sit-v");
-  function fillDiaryForm(k){
-    var r=mem.diary[k]||{stairs:0,sit:0,lock:false,note:""};
-    dStairs.value=r.stairs; dSit.value=r.sit; dLock.checked=!!r.lock; dNote.value=r.note||"";
-    document.getElementById("d-stairs-v").textContent=r.stairs;
-    document.getElementById("d-sit-v").textContent=r.sit;
-  }
-  dDate.addEventListener("change",function(){ if(dDate.value) fillDiaryForm(dDate.value); });
-  document.getElementById("d-save").addEventListener("click",function(){
-    var k=dDate.value||todayKey();
-    mem.diary[k]={stairs:+dStairs.value, sit:+dSit.value, lock:dLock.checked, note:dNote.value.trim()};
-    save(); renderDiary();
-    var m=document.getElementById("d-msg"); m.textContent="Сохранено за "+fmt(k); setTimeout(function(){m.textContent="";},2500);
-  });
-  function renderDiary(){
-    if(!dDate.value){ dDate.value=todayKey(); fillDiaryForm(dDate.value); }
-    var root=document.getElementById("diary-table"); root.innerHTML="";
-    var keys=Object.keys(mem.diary).sort().reverse().slice(0,30);
-    if(!keys.length){ root.appendChild(el("p",{"class":"empty",text:"Записей пока нет."})); return; }
-    var tb=el("tbody");
-    keys.forEach(function(k){
-      var r=mem.diary[k]; var ex=(mem.log[k]||[]).length;
-      tb.appendChild(el("tr",null,[
-        el("td",{text:fmt(k)}), el("td",{text:String(r.stairs)}), el("td",{text:String(r.sit)}),
-        el("td",{text:r.lock?"да":"—"}), el("td",{text:String(ex)}), el("td",{text:r.note||""})
-      ]));
-    });
-    root.appendChild(el("table",null,[
-      el("thead",null,[el("tr",null,[el("th",{text:"Дата"}),el("th",{text:"Спуск"}),el("th",{text:"Сидение"}),el("th",{text:"Блок"}),el("th",{text:"Упр."}),el("th",{text:"Заметка"})])]),
-      tb
-    ]));
-  }
-
-  // ---------- data ----------
-  document.getElementById("export").addEventListener("click",function(){
-    var blob=new Blob([JSON.stringify(mem,null,2)],{type:"application/json"});
-    var a=document.createElement("a"); a.href=URL.createObjectURL(blob);
-    a.download="knee-rehab-"+todayKey()+".json"; document.body.appendChild(a); a.click();
-    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },500);
-  });
-  document.getElementById("import").addEventListener("change",function(ev){
-    var f=ev.target.files[0]; if(!f) return;
-    var rd=new FileReader();
-    rd.onload=function(){
-      var msg=document.getElementById("data-msg");
-      try{ mem=normalize(JSON.parse(rd.result)); save(); renderCatalog(); renderToday(); msg.textContent="Копия загружена."; }
-      catch(e){ msg.textContent="Не получилось прочитать файл."; }
-    };
-    rd.readAsText(f); ev.target.value="";
-  });
-  document.getElementById("reset").addEventListener("click",function(){
-    if(!confirm("Удалить все отметки, заметки и дневник на этом устройстве?")) return;
-    mem=normalize({}); save(); renderCatalog(); renderToday();
-    document.getElementById("data-msg").textContent="Данные удалены.";
-  });
-
-  // ---------- voice / sound ----------
-  var Voice = (function(){
-    var ruVoice=null, synth=window.speechSynthesis||null;
-    function pick(){
-      if(!synth) return;
-      try{
-        var vs=synth.getVoices()||[];
-        ruVoice = vs.filter(function(v){return /^ru/i.test(v.lang);})
-                    .sort(function(a,b){ return (b.localService?1:0)-(a.localService?1:0); })[0] || null;
-      }catch(e){}
-    }
+  // ---------- voice, sound, wake lock ----------
+  var Voice=(function(){
+    var synth=window.speechSynthesis||null, ru=null;
+    function pick(){ try{ var v=synth.getVoices()||[]; ru=v.filter(function(x){return /^ru/i.test(x.lang);}).sort(function(a,b){return (b.localService?1:0)-(a.localService?1:0);})[0]||null; }catch(e){} }
     if(synth){ pick(); try{ synth.addEventListener("voiceschanged",pick); }catch(e){ synth.onvoiceschanged=pick; } }
-    function say(text, interrupt){
-      if(!mem.settings.voice || !synth) return;
-      try{
-        if(interrupt) synth.cancel();
-        var u=new SpeechSynthesisUtterance(text);
-        u.lang="ru-RU"; if(ruVoice) u.voice=ruVoice; u.rate=1.05;
-        synth.speak(u);
-      }catch(e){}
-    }
-    function stop(){ try{ if(synth) synth.cancel(); }catch(e){} }
-    function hasRu(){ return !!ruVoice; }
-    function available(){ return !!synth; }
-    return {say:say, stop:stop, hasRu:hasRu, available:available};
-  })();
-
-  var Sound = (function(){
-    var ctx=null;
-    function unlock(){
-      try{
-        if(!ctx){ var AC=window.AudioContext||window.webkitAudioContext; if(AC) ctx=new AC(); }
-        if(ctx && ctx.state==="suspended") ctx.resume();
-      }catch(e){}
-    }
-    function beep(freq, ms){
-      if(!ctx) return;
-      try{
-        var o=ctx.createOscillator(), g=ctx.createGain();
-        o.frequency.value=freq||880; o.type="sine";
-        g.gain.setValueAtTime(0.0001,ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.25,ctx.currentTime+0.01);
-        g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+(ms||150)/1000);
-        o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime+(ms||150)/1000+0.02);
-      }catch(e){}
-    }
-    function buzz(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
-    return {unlock:unlock, beep:beep, buzz:buzz};
-  })();
-
-  var Wake = (function(){
-    var lock=null, want=false;
-    function req(){
-      if(!want || !("wakeLock" in navigator)) return;
-      try{ navigator.wakeLock.request("screen").then(function(l){ lock=l; }).catch(function(){}); }catch(e){}
-    }
-    document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="visible" && want) req(); });
     return {
-      on:function(){ want=true; req(); },
-      off:function(){ want=false; try{ if(lock) lock.release(); }catch(e){} lock=null; },
-      supported:function(){ return "wakeLock" in navigator; }
+      say:function(t,interrupt){ if(!mem.settings.voice||!synth) return; try{ if(interrupt) synth.cancel(); var u=new SpeechSynthesisUtterance(t); u.lang="ru-RU"; if(ru) u.voice=ru; u.rate=1.05; synth.speak(u); }catch(e){} },
+      stop:function(){ try{ if(synth) synth.cancel(); }catch(e){} },
+      ok:function(){ return !!synth; }, ru:function(){ return !!ru; }
     };
   })();
+  var Sound=(function(){
+    var ctx=null;
+    return {
+      unlock:function(){ try{ if(!ctx){ var A=window.AudioContext||window.webkitAudioContext; if(A) ctx=new A(); } if(ctx&&ctx.state==="suspended") ctx.resume(); }catch(e){} },
+      beep:function(f,ms){ if(!ctx) return; try{ var o=ctx.createOscillator(), g=ctx.createGain(), t=ctx.currentTime, d=(ms||150)/1000;
+        o.frequency.value=f||880; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.25,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+        o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+d+0.02); }catch(e){} },
+      buzz:function(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+    };
+  })();
+  var Wake=(function(){
+    var lock=null, want=false;
+    function req(){ if(!want||!("wakeLock" in navigator)) return; try{ navigator.wakeLock.request("screen").then(function(l){lock=l;}).catch(function(){}); }catch(e){} }
+    document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="visible"&&want) req(); });
+    return { on:function(){ want=true; req(); }, off:function(){ want=false; try{ if(lock) lock.release(); }catch(e){} lock=null; }, ok:function(){ return "wakeLock" in navigator; } };
+  })();
 
-  // ---------- timer ----------
-  var Timer = (function(){
-    var $=function(id){return document.getElementById(id);};
-    var ov=$("timer"), tName=$("t-name"), tPhase=$("t-phase"), tBig=$("t-big"), tSets=$("t-sets"),
-        tBar=$("t-bar"), bDone=$("t-done"), bPause=$("t-pause"), bSkip=$("t-skip"), bClose=$("t-close"),
-        bVoice=$("t-voice"), tHint=$("t-hint");
-    var ex=null, cfg=null, phases=[], idx=0, endAt=0, remain=0, paused=false, iv=null, spoken={};
-    var PREP=5;
+  // ---------- player ----------
+  var Player=(function(){
+    var $=function(i){ return document.getElementById(i); };
+    var ov=$("player"), svg=$("p-svg"), pName=$("p-name"), pPhase=$("p-phase"), pBig=$("p-big"), pSub=$("p-sub"),
+        pBar=$("p-bar"), pCount=$("p-count"), pNext=$("p-next"), pDesc=$("p-desc"), pHint=$("p-hint"),
+        bPause=$("p-pause"), bSkip=$("p-skip"), bNext=$("p-nextex"), bClose=$("p-close"), bVoice=$("p-voice");
+    var queue=[], qi=0, phases=[], pi=0, t0=0, pausedEl=0, paused=false, iv=null, spoken={}, lastRep=0, lastFrame="", finished=false;
 
-    function plural(n, one, few, many){
-      var m10=n%10, m100=n%100;
-      if(m10===1 && m100!==11) return one;
-      if(m10>=2 && m10<=4 && (m100<12 || m100>14)) return few;
-      return many;
+    function voiceBtn(){ bVoice.textContent = mem.settings.voice ? "🔊 Голос" : "🔇 Без голоса"; }
+    function id(){ return queue[qi]; }
+    function cur(){ return phases[pi]; }
+    function describe(i){
+      var c=getCfg(i);
+      return c.sets+" "+plural(c.sets,"подход","подхода","подходов")+" по "+(c.hold>0 ? c.hold+" "+plural(c.hold,"секунде","секунды","секунд") : c.reps+" "+plural(c.reps,"повторению","повторения","повторений"));
     }
-    function build(){
-      phases=[{type:"prep", dur:PREP}];
-      for(var i=1;i<=cfg.sets;i++){
-        phases.push(cfg.hold>0 ? {type:"hold", dur:cfg.hold, set:i} : {type:"reps", set:i});
-        if(i<cfg.sets && cfg.rest>0) phases.push({type:"rest", dur:cfg.rest, set:i});
+    function build(i, first){
+      var c=getCfg(i); phases=[{t:"prep",dur:first?5:10}];
+      for(var s=1;s<=c.sets;s++){
+        phases.push(c.hold>0 ? {t:"hold",dur:c.hold,set:s} : {t:"reps",dur:c.reps*cycle(i),set:s,reps:c.reps});
+        if(s<c.sets && c.rest>0) phases.push({t:"rest",dur:c.rest,set:s});
       }
     }
-    function voiceBtn(){ bVoice.textContent = mem.settings.voice ? "🔊 Голос: вкл" : "🔇 Голос: выкл"; }
-
-    function start(e){
-      ex=e; cfg=getCfg(e);
-      if(!cfg.sets){ return; }
-      Sound.unlock(); Wake.on(); build(); idx=0; paused=false;
-      tName.textContent=e.name; voiceBtn();
-      var hints=[];
-      if(!Voice.available()) hints.push("Голосовой движок в этом браузере недоступен — будут только звуковые сигналы.");
-      else if(!Voice.hasRu()) hints.push("Русский голос не найден — браузер может читать с акцентом. Его можно установить в настройках речи телефона.");
-      if(!Wake.supported()) hints.push("Этот браузер не умеет держать экран включённым — увеличь время автоблокировки на время занятия.");
-      tHint.textContent=hints.join(" ");
+    function start(list){
+      if(!list||!list.length) return;
+      queue=list.slice(); qi=0; finished=false;
+      Sound.unlock(); Wake.on(); voiceBtn();
+      var h=[];
+      if(!Voice.ok()) h.push("Голос в этом браузере недоступен, будут только звуковые сигналы.");
+      else if(!Voice.ru()) h.push("Русский голос не найден, браузер может читать с акцентом.");
+      if(!Wake.ok()) h.push("Этот браузер не держит экран включённым: увеличь время автоблокировки.");
+      pHint.textContent=h.join(" ");
       ov.hidden=false; document.body.style.overflow="hidden";
-      Voice.say(e.name+". "+describe(), true);
-      enter();
-      clearInterval(iv); iv=setInterval(tick,200);
+      bPause.hidden=false; bSkip.hidden=false; bNext.hidden=false;
+      loadEx(true);
+      clearInterval(iv); iv=setInterval(tick,50);
     }
-    function describe(){
-      var s=cfg.sets+" "+plural(cfg.sets,"подход","подхода","подходов");
-      if(cfg.hold>0) s+=" по "+cfg.hold+" "+plural(cfg.hold,"секунде","секунды","секунд");
-      else s+=" по "+cfg.reps+" "+plural(cfg.reps,"повторению","повторения","повторений");
-      return s;
+    function loadEx(first){
+      var i=id(), ex=EX[i];
+      build(i, first); pi=0;
+      svg.setAttribute("viewBox", viewBox(i));
+      pCount.textContent = queue.length>1 ? ("Упражнение "+(qi+1)+" из "+queue.length) : "";
+      pName.textContent=ex.name;
+      pDesc.innerHTML=""; pDesc.appendChild(el("p",{text:ex.how,style:"margin:0"}));
+      if(ex.caution) pDesc.appendChild(el("p",{"class":"caution",text:"⚠ "+ex.caution}));
+      pNext.textContent = qi+1<queue.length ? ("Дальше: "+EX[queue[qi+1]].name) : "";
+      bNext.textContent = qi+1<queue.length ? "След. ▶▶" : "Завершить";
+      Voice.say((first?"":"Следующее упражнение. ")+ex.name+". "+describe(i)+".", true);
+      enter();
     }
     function enter(){
-      var p=phases[idx]; spoken={};
-      tPhase.className="t-phase"+(p.type==="rest"?" rest":p.type==="prep"?" prep":"");
-      tBig.className="t-big"; bDone.hidden=true; bPause.hidden=false;
-      if(p.type==="prep"){ tPhase.textContent="Приготовься"; tSets.textContent=describe(); }
-      if(p.type==="hold"){ tPhase.textContent="Держи"; tSets.textContent="Подход "+p.set+" из "+cfg.sets;
-        Voice.say("Подход "+p.set+". Держи.", false); Sound.beep(880,200); Sound.buzz(150); }
-      if(p.type==="rest"){ tPhase.textContent="Отдых"; tSets.textContent="Следующий: подход "+(p.set+1)+" из "+cfg.sets;
-        Voice.say("Отдых "+p.dur+" "+plural(p.dur,"секунда","секунды","секунд")+".", true); Sound.beep(520,250); Sound.buzz([80,60,80]); }
-      if(p.type==="reps"){
-        tPhase.textContent="Выполняй"; tSets.textContent="Подход "+p.set+" из "+cfg.sets;
-        tBig.className="t-big text"; tBig.textContent=cfg.reps+" "+plural(cfg.reps,"повтор","повтора","повторов");
-        bDone.hidden=false; bPause.hidden=true; tBar.style.width="0";
-        Voice.say("Подход "+p.set+". "+cfg.reps+" "+plural(cfg.reps,"повторение","повторения","повторений")+". Нажми готово, когда закончишь.", false);
-        Sound.beep(880,200); Sound.buzz(150);
-        return;
-      }
-      endAt=Date.now()+p.dur*1000; remain=p.dur*1000; render();
+      var p=cur(), i=id(), c=getCfg(i);
+      t0=Date.now(); pausedEl=0; paused=false; bPause.textContent="Пауза"; spoken={}; lastRep=0; lastFrame="";
+      pPhase.className="p-phase"+(p.t==="rest"?" rest":p.t==="prep"?" prep":"");
+      pBig.className="p-big";
+      if(p.t==="prep"){ pPhase.textContent="Приготовься"; pSub.textContent=describe(i); }
+      if(p.t==="hold"){ pPhase.textContent="Держи"; pSub.textContent="Подход "+p.set+" из "+c.sets; Voice.say("Подход "+p.set+". Держи.",false); Sound.beep(880,200); Sound.buzz(150); }
+      if(p.t==="reps"){ pPhase.textContent="Выполняй"; pSub.textContent="Подход "+p.set+" из "+c.sets+" · по счёту голоса"; Voice.say("Подход "+p.set+".",false); Sound.beep(880,200); Sound.buzz(150); }
+      if(p.t==="rest"){ pPhase.textContent="Отдых"; pSub.textContent="Следующий подход "+(p.set+1)+" из "+c.sets; Voice.say("Отдых "+p.dur+" "+plural(p.dur,"секунда","секунды","секунд")+".",true); Sound.beep(520,250); Sound.buzz([80,60,80]); }
+      tick();
     }
-    function render(){
-      var p=phases[idx]; if(!p || p.type==="reps") return;
-      var left = paused ? remain : Math.max(0,endAt-Date.now());
-      var sec=Math.ceil(left/1000);
-      var m=Math.floor(sec/60), s=sec%60;
-      tBig.textContent = m>0 ? (m+":"+(s<10?"0":"")+s) : String(sec);
-      tBar.style.width = Math.min(100, (1-left/(p.dur*1000))*100)+"%";
-      return {left:left, sec:sec};
+    function elapsed(){ return paused ? pausedEl : Date.now()-t0; }
+    function draw(k,tense){
+      var key=k.toFixed(3)+(tense?"t":"");
+      if(key===lastFrame) return; lastFrame=key;
+      svg.innerHTML=figInner(id(),k,tense);
     }
     function tick(){
-      if(ov.hidden || paused) return;
-      var p=phases[idx]; if(!p || p.type==="reps") return;
-      var r=render(); if(!r) return;
-      if(p.dur>=20 && r.sec===10 && !spoken[10]){ spoken[10]=1; Voice.say(p.type==="rest"?"Через 10 секунд — следующий подход":"Осталось 10 секунд", false); }
-      if(r.sec<=3 && r.sec>=1 && !spoken[r.sec]){ spoken[r.sec]=1; Sound.beep(660,90); if(p.type!=="prep") Voice.say(["","один","два","три"][r.sec], true); }
-      if(r.left<=0) next();
+      if(ov.hidden||finished) return;
+      var p=cur(); if(!p) return;
+      var e=elapsed(), dur=p.dur*1000;
+      if(!paused && e>=dur){ advance(); return; }
+      var left=Math.max(0,dur-e), sec=Math.ceil(left/1000);
+      pBar.style.width=Math.min(100,e/dur*100)+"%";
+      var ex=EX[id()];
+      if(p.t==="reps"){
+        var cy=cycle(id())*1000, rep=Math.min(p.reps, Math.floor(e/cy)+1), ph=(e%cy)/1000, tp=tempo(id()), k;
+        if(ph<tp[0]) k=ease(ph/tp[0]); else if(ph<tp[0]+tp[1]) k=1; else k=1-ease((ph-tp[0]-tp[1])/tp[2]);
+        pBig.textContent=rep+" / "+p.reps;
+        if(!paused && rep!==lastRep){ lastRep=rep; Voice.say(String(rep),true); Sound.beep(740,60); }
+        draw(k,false);
+        return;
+      }
+      pBig.textContent = sec>=60 ? (Math.floor(sec/60)+":"+pad(sec%60)) : String(sec);
+      if(p.t==="hold") draw(ease(Math.min(1,e/1000)), ex.iso && e>700);
+      else draw(0,false);
+      if(paused) return;
+      if(p.dur>=20 && sec===10 && !spoken[10]){ spoken[10]=1; Voice.say(p.t==="rest"?"Через 10 секунд следующий подход":"Осталось 10 секунд",false); }
+      if(sec<=3 && sec>=1 && !spoken[sec]){ spoken[sec]=1; Sound.beep(660,90); if(p.t!=="prep") Voice.say(["","один","два","три"][sec],true); }
     }
-    function next(){
-      idx++;
-      if(idx>=phases.length){ finish(); return; }
+    function advance(){
+      pi++;
+      if(pi>=phases.length){ setDone(id(),true); Sound.beep(988,160); nextEx(true); return; }
       enter();
     }
+    function nextEx(){
+      qi++;
+      if(qi>=queue.length){ finish(); return; }
+      loadEx(false);
+    }
     function finish(){
-      clearInterval(iv); iv=null;
-      var k=todayKey(), arr=mem.log[k]||[];
-      if(arr.indexOf(ex.id)<0){ arr.push(ex.id); mem.log[k]=arr; save(); }
-      tPhase.className="t-phase"; tPhase.textContent="Готово";
-      tBig.className="t-big text"; tBig.textContent="✓ Упражнение выполнено";
-      tSets.textContent="Отмечено в «Сегодня»"; tBar.style.width="100%";
-      bDone.hidden=true; bPause.hidden=true; bSkip.hidden=true;
-      bClose.textContent="✕ Закрыть";
-      Voice.say("Упражнение завершено. Отличная работа.", true); Sound.beep(988,180); setTimeout(function(){Sound.beep(1318,260);},200); Sound.buzz([120,80,200]);
-      Wake.off();
+      finished=true; clearInterval(iv); iv=null; Wake.off();
+      pCount.textContent=""; pName.textContent= queue.length>1 ? "Тренировка завершена" : "Упражнение завершено";
+      pPhase.className="p-phase"; pPhase.textContent="Готово"; pBig.className="p-big text"; pBig.textContent="✓";
+      pSub.textContent="Отмечено в дневнике"; pBar.style.width="100%"; pNext.textContent=""; pDesc.innerHTML="";
+      bPause.hidden=true; bSkip.hidden=true; bNext.hidden=true;
+      Voice.say(queue.length>1?"Тренировка завершена. Отличная работа.":"Упражнение завершено.",true);
+      Sound.beep(988,180); setTimeout(function(){Sound.beep(1318,260);},200); Sound.buzz([120,80,200]);
     }
     function close(){
       clearInterval(iv); iv=null; Voice.stop(); Wake.off();
       ov.hidden=true; document.body.style.overflow="";
-      bSkip.hidden=false; bPause.hidden=false; bPause.textContent="Пауза"; bClose.textContent="✕ Стоп";
       renderToday();
     }
     bPause.addEventListener("click",function(){
-      var p=phases[idx]; if(!p || p.type==="reps") return;
-      if(!paused){ remain=Math.max(0,endAt-Date.now()); paused=true; bPause.textContent="Продолжить"; Voice.say("Пауза", true); Wake.off(); }
-      else { endAt=Date.now()+remain; paused=false; bPause.textContent="Пауза"; Voice.say("Продолжаем", true); Wake.on(); }
-      render();
+      if(finished) return;
+      if(!paused){ pausedEl=Date.now()-t0; paused=true; bPause.textContent="Продолжить"; Voice.say("Пауза",true); Wake.off(); }
+      else { t0=Date.now()-pausedEl; paused=false; bPause.textContent="Пауза"; Voice.say("Продолжаем",true); Wake.on(); }
+      tick();
     });
-    bSkip.addEventListener("click",function(){ if(paused){ paused=false; bPause.textContent="Пауза"; } Voice.stop(); next(); });
-    bDone.addEventListener("click",function(){ Voice.stop(); next(); });
+    bSkip.addEventListener("click",function(){ if(!finished){ Voice.stop(); advance(); } });
+    bNext.addEventListener("click",function(){ if(!finished){ Voice.stop(); nextEx(); } });
     bClose.addEventListener("click",close);
-    bVoice.addEventListener("click",function(){
-      mem.settings.voice=!mem.settings.voice; save(); voiceBtn();
-      if(!mem.settings.voice) Voice.stop(); else Voice.say("Голос включён", true);
-    });
-    document.addEventListener("keydown",function(ev){ if(!ov.hidden && ev.key==="Escape") close(); });
+    bVoice.addEventListener("click",function(){ mem.settings.voice=!mem.settings.voice; save(); voiceBtn(); if(mem.settings.voice) Voice.say("Голос включён",true); else Voice.stop(); });
+    document.addEventListener("keydown",function(e){ if(!ov.hidden){ if(e.key==="Escape") close(); if(e.key===" "){ e.preventDefault(); bPause.click(); } } });
     return {start:start};
   })();
 
   load(); renderCatalog(); renderToday();
+  // refresh plan after midnight if the page stays open
+  var shownDay=keyOf(new Date());
+  setInterval(function(){ var k=keyOf(new Date()); if(k!==shownDay){ shownDay=k; renderToday(); } },60000);
 })();
 </script>
 </body>
