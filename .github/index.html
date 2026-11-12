@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Колено — трекер упражнений</title>
+<title>Трекер упражнений для козочки</title>
 <meta name="theme-color" content="#0f766e">
 <style>
   :root{
@@ -74,7 +74,7 @@
 </head>
 <body>
 <header>
-  <h1>Колено — трекер упражнений</h1>
+  <h1>Колено - трекер упражнений</h1>
   <p class="sub">Тендинопатия связки надколенника · хондромаляция надколенника · растяжение ПКС</p>
 </header>
 
@@ -89,7 +89,7 @@
 <main>
   <!-- СЕГОДНЯ -->
   <section id="tab-today">
-    <div class="card banner"><strong>Не план лечения.</strong> Это справочник по материалам NHS. В «Сегодня» попадают только упражнения, которые ты отметил как одобренные физическим терапевтом. Подходы и повторения — как скажет терапевт.</div>
+    <div class="card banner"><strong>Не план лечения.</strong> Это справочник по материалам NHS. В «Сегодня» попадают только упражнения, которые ты отметил как одобренные физическим терапевтом. Подходы и повторения - как скажет терапевт.</div>
     <div class="card">
       <h3 id="today-date"></h3>
       <div class="progress"><div id="today-bar"></div></div>
@@ -103,7 +103,7 @@
     <div id="catalog"></div>
     <div class="card">
       <h3>Только у специалиста</h3>
-      <p class="how">Мобилизация надколенника и работа на ROM (из твоего плана реабилитации) — это ручные техники терапевта, дома их не повторить.</p>
+      <p class="how">Мобилизация надколенника и работа на ROM (из твоего плана реабилитации) - это ручные техники терапевта, дома их не повторить.</p>
     </div>
   </section>
 
@@ -112,7 +112,7 @@
     <div class="card">
       <h3>Запись за день</h3>
       <div class="row"><input type="date" id="d-date" aria-label="Дата"></div>
-      <p class="src" style="margin:12px 0 2px">Боль при спуске по лестнице (0 — нет, 10 — максимум)</p>
+      <p class="src" style="margin:12px 0 2px">Боль при спуске по лестнице (0 - нет, 10 - максимум)</p>
       <div class="slider"><input type="range" id="d-stairs" min="0" max="10" value="0" aria-label="Боль при спуске"><span class="score" id="d-stairs-v">0</span></div>
       <p class="src" style="margin:12px 0 2px">Боль после долгого сидения</p>
       <div class="slider"><input type="range" id="d-sit" min="0" max="10" value="0" aria-label="Боль после сидения"><span class="score" id="d-sit-v">0</span></div>
@@ -131,9 +131,9 @@
     <div class="card">
       <h3>Боль во время упражнений</h3>
       <ul class="rules">
-        <li>Боль во время упражнения не должна быть больше обычной более чем на 1–2 балла по шкале 0–10.</li>
+        <li>Боль во время упражнения не должна быть больше обычной более чем на 1-2 балла по шкале 0-10.</li>
         <li>Она должна пройти в течение примерно 30 минут, и на следующий день колено не должно быть хуже.</li>
-        <li>Если стало хуже — в следующий раз меньше повторений или шаг назад к более лёгкому упражнению.</li>
+        <li>Если стало хуже - в следующий раз меньше повторений или шаг назад к более лёгкому упражнению.</li>
         <li>Упростить упражнение можно так: меньше амплитуда, меньше повторений, меньше вес, медленнее темп, больше отдых между подходами.</li>
       </ul>
       <p class="src">Источники: <a href="https://wiltshirehealthandcare.nhs.uk/wp-content/uploads/sites/8/2024/08/Patella-Tendinopathy-PIL-100.0.pdf" target="_blank" rel="noopener">Wiltshire Health and Care</a>, <a href="https://newcastle-hospitals.nhs.uk/wp-content/uploads/2021/11/2024-Newcastle-OHS-Anterior-Knee-Pain-leaflet_PRINT_ONLY-1.pdf" target="_blank" rel="noopener">Newcastle Hospitals</a>, <a href="https://www.nhsaaa.net/?p=6505" target="_blank" rel="noopener">NHS Ayrshire &amp; Arran</a></p>
@@ -141,9 +141,9 @@
     <div class="card">
       <h3>Логика этапов</h3>
       <ul class="rules">
-        <li><b>Этап 1 — изометрия</b>: удержание без движения. Старт, когда больно даже на лестнице.</li>
-        <li><b>Этап 2 — изотоника</b>: силовые с движением, когда этап 1 переносится хорошо.</li>
-        <li><b>Этап 3 — «пружинящие»</b>: прыжки и быстрые движения, когда сила и боль заметно улучшились.</li>
+        <li><b>Этап 1 - изометрия</b>: удержание без движения. Старт, когда больно даже на лестнице.</li>
+        <li><b>Этап 2 - изотоника</b>: силовые с движением, когда этап 1 переносится хорошо.</li>
+        <li><b>Этап 3 - «пружинящие»</b>: прыжки и быстрые движения, когда сила и боль заметно улучшились.</li>
       </ul>
       <p class="src">Источник: <a href="https://sbuhb.nhs.wales/hospitals/a-z-services/physiotherapy/musculoskeletal-physiotherapy/knee-pain/patella-tendinopathy/" target="_blank" rel="noopener">NHS Swansea Bay</a></p>
     </div>
@@ -182,21 +182,21 @@
   "use strict";
 
   var SRC = {
-    swansea: ["NHS Swansea Bay — тендинопатия надколенника","https://sbuhb.nhs.wales/hospitals/a-z-services/physiotherapy/musculoskeletal-physiotherapy/knee-pain/patella-tendinopathy/"],
-    ayrshire: ["NHS Ayrshire & Arran — тендинопатия надколенника","https://www.nhsaaa.net/?p=6505"],
-    leeds: ["Leeds NHS — тендинопатия надколенника","https://leedscommunityhealthcare.nhs.uk/our-services-a-z/musculoskeletal-msk/knee-problems/known-diagnosed-knee-problems/patella-tendonopathy"],
-    wilts: ["Wiltshire Health and Care — брошюра (PDF)","https://wiltshirehealthandcare.nhs.uk/wp-content/uploads/sites/8/2024/08/Patella-Tendinopathy-PIL-100.0.pdf"],
-    ruhT: ["RUH Bath — тендинопатия надколенника (PDF)","https://www.ruh.nhs.uk/patients/services/physiotherapy/documents/Patellar_Tendinopathy.pdf"],
-    ruhP: ["RUH Bath — пателлофеморальная боль (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY027_Patellofemoral_pain.pdf"],
-    ruhA: ["RUH Bath — буклет по ПКС (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY034_ACL_prehab_booklet.pdf"],
-    cuh: ["Cambridge University Hospitals — передняя боль в колене","https://cuh.nhs.uk/patient-information/patello-femoral-syndrome-anterior-knee-pain-or-chondromalacia-patella"],
-    lanark: ["NHS Lanarkshire — пателлофеморальная боль (8 видео по этапам)","https://www.nhslanarkshire.scot.nhs.uk/?p=27401"]
+    swansea: ["NHS Swansea Bay - тендинопатия надколенника","https://sbuhb.nhs.wales/hospitals/a-z-services/physiotherapy/musculoskeletal-physiotherapy/knee-pain/patella-tendinopathy/"],
+    ayrshire: ["NHS Ayrshire & Arran - тендинопатия надколенника","https://www.nhsaaa.net/?p=6505"],
+    leeds: ["Leeds NHS - тендинопатия надколенника","https://leedscommunityhealthcare.nhs.uk/our-services-a-z/musculoskeletal-msk/knee-problems/known-diagnosed-knee-problems/patella-tendonopathy"],
+    wilts: ["Wiltshire Health and Care - брошюра (PDF)","https://wiltshirehealthandcare.nhs.uk/wp-content/uploads/sites/8/2024/08/Patella-Tendinopathy-PIL-100.0.pdf"],
+    ruhT: ["RUH Bath - тендинопатия надколенника (PDF)","https://www.ruh.nhs.uk/patients/services/physiotherapy/documents/Patellar_Tendinopathy.pdf"],
+    ruhP: ["RUH Bath - пателлофеморальная боль (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY027_Patellofemoral_pain.pdf"],
+    ruhA: ["RUH Bath - буклет по ПКС (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY034_ACL_prehab_booklet.pdf"],
+    cuh: ["Cambridge University Hospitals - передняя боль в колене","https://cuh.nhs.uk/patient-information/patello-femoral-syndrome-anterior-knee-pain-or-chondromalacia-patella"],
+    lanark: ["NHS Lanarkshire - пателлофеморальная боль (8 видео по этапам)","https://www.nhslanarkshire.scot.nhs.uk/?p=27401"]
   };
 
   var STAGES = [
-    {id:1, title:"Этап 1 — изометрия", note:"Удержание без движения. С него начинают, когда колено болит даже на лестнице."},
-    {id:2, title:"Этап 2 — изотоника", note:"Силовые с движением. В NHS Swansea Bay: 3–4 подхода, вес от 15ПМ постепенно до 6ПМ, через день. ПМ — повторный максимум, вес, с которым получается ровно столько повторений."},
-    {id:3, title:"Этап 3 — «пружинящие» нагрузки", note:"Прыжки и быстрые движения. Только когда сила и боль заметно улучшились и терапевт дал добро."}
+    {id:1, title:"Этап 1 - изометрия", note:"Удержание без движения. С него начинают, когда колено болит даже на лестнице."},
+    {id:2, title:"Этап 2 - изотоника", note:"Силовые с движением. В NHS Swansea Bay: 3-4 подхода, вес от 15ПМ постепенно до 6ПМ, через день. ПМ - повторный максимум, вес, с которым получается ровно столько повторений."},
+    {id:3, title:"Этап 3 - «пружинящие» нагрузки", note:"Прыжки и быстрые движения. Только когда сила и боль заметно улучшились и терапевт дал добро."}
   ];
 
   var EX = [
@@ -205,17 +205,17 @@
      params:"По NHS Ayrshire: 3 раза в день", src:["ayrshire"]},
     {id:"isoext", stage:1, name:"Изометрическое разгибание колена",
      how:"Сидя, упрись голенью в неподвижную опору или в закреплённую резинку и дави так, будто разгибаешь колено, но без движения.",
-     params:"5 × 30–45 с, ежедневно", src:["wilts","swansea"]},
+     params:"5 × 30-45 с, ежедневно", src:["wilts","swansea"]},
     {id:"wallsit", stage:1, name:"«Стульчик» у стены",
      how:"Встань спиной к стене и съедь вниз, пока колени не согнутся примерно на 70°. Держи позицию.",
-     params:"5 × 30–45 с, отдых 1–2 мин, 3–5 раз в день",
-     caution:"При хондромаляции глубина сгибания важна — угол уточни у терапевта.", src:["leeds"]},
+     params:"5 × 30-45 с, отдых 1-2 мин, 3-5 раз в день",
+     caution:"При хондромаляции глубина сгибания важна - угол уточни у терапевта.", src:["leeds"]},
     {id:"slr", stage:1, name:"Подъём прямой ноги",
      how:"Лёжа на спине, вытяни ногу. Напряги бедро, подними прямую ногу примерно на 15 см и медленно опусти.",
      params:"3 × 10", src:["ruhP"]},
     {id:"quadiso", stage:2, name:"Силовое на квадрицепс",
-     how:"Разгибание ног в тренажёре, жим ногами или их вариант с резинкой — конкретное упражнение и амплитуду выбирает терапевт.",
-     params:"3–4 подхода, 15ПМ → 6ПМ, через день", src:["swansea","ruhT"]},
+     how:"Разгибание ног в тренажёре, жим ногами или их вариант с резинкой - конкретное упражнение и амплитуду выбирает терапевт.",
+     params:"3-4 подхода, 15ПМ → 6ПМ, через день", src:["swansea","ruhT"]},
     {id:"stepup", stage:2, name:"Зашагивание на ступеньку (step-up)",
      how:"Встань лицом к ступеньке, больная нога на ступеньке. Поднимись, перенося вес на неё, и медленно опустись.",
      params:"По указанию терапевта", src:["cuh","ruhP"]},
@@ -365,7 +365,7 @@
       var r=mem.diary[k]; var ex=(mem.log[k]||[]).length;
       tb.appendChild(el("tr",null,[
         el("td",{text:fmt(k)}), el("td",{text:String(r.stairs)}), el("td",{text:String(r.sit)}),
-        el("td",{text:r.lock?"да":"—"}), el("td",{text:String(ex)}), el("td",{text:r.note||""})
+        el("td",{text:r.lock?"да":"-"}), el("td",{text:String(ex)}), el("td",{text:r.note||""})
       ]));
     });
     root.appendChild(el("table",null,[
