@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Колено — трекер упражнений</title>
+<meta name="theme-color" content="#0f766e">
+<style>
+  :root{
+    --bg:#f6f7f8; --card:#fff; --text:#1c2126; --muted:#5f6b76; --line:#e3e7eb;
+    --accent:#0f766e; --accent-soft:#e6f4f2; --warn:#b45309; --warn-soft:#fef3e2;
+    --ok:#15803d; --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#111417; --card:#1a1f24; --text:#e8ecef; --muted:#9aa6b1; --line:#2b3238;
+      --accent:#2dd4bf; --accent-soft:#12312e; --warn:#fbbf24; --warn-soft:#3a2c10; --ok:#4ade80; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    padding-bottom:env(safe-area-inset-bottom)}
+  header{padding:20px 16px 8px;max-width:760px;margin:0 auto}
+  h1{font-size:1.45rem;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:.92rem;margin:0}
+  nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+  nav .wrap{max-width:760px;margin:0 auto;display:flex;gap:4px;padding:8px 12px;overflow-x:auto}
+  nav button{flex:0 0 auto;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;
+    padding:8px 14px;border-radius:999px;cursor:pointer}
+  nav button[aria-selected="true"]{background:var(--accent-soft);color:var(--accent)}
+  main{max-width:760px;margin:0 auto;padding:12px}
+  section[hidden]{display:none}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:0 0 12px}
+  .banner{background:var(--warn-soft);border-color:transparent;font-size:.93rem}
+  .banner strong{color:var(--warn)}
+  h2{font-size:1.1rem;margin:18px 4px 8px}
+  h3{font-size:1rem;margin:0 0 4px}
+  .stage-note{color:var(--muted);font-size:.9rem;margin:-4px 4px 10px}
+  .params{display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:600;
+    font-size:.88rem;border-radius:8px;padding:2px 8px;margin:4px 0}
+  .how{margin:6px 0}
+  .caution{color:var(--warn);font-size:.9rem;margin:6px 0}
+  .src{font-size:.85rem;color:var(--muted)}
+  .src a{color:var(--accent)}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+  label.chk{display:flex;gap:8px;align-items:center;cursor:pointer;font-size:.95rem}
+  input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent)}
+  textarea,input[type=date],input[type=text]{width:100%;font:inherit;color:var(--text);background:var(--bg);
+    border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+  textarea{min-height:60px;resize:vertical}
+  details summary{cursor:pointer;color:var(--muted);font-size:.9rem;margin-top:8px}
+  .btn{border:1px solid var(--accent);background:var(--accent);color:#fff;font:inherit;font-weight:600;
+    padding:8px 14px;border-radius:10px;cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--accent)}
+  .btn:disabled{opacity:.45;cursor:default}
+  .today-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .today-item:last-child{border-bottom:0}
+  .today-item .meta{color:var(--muted);font-size:.88rem}
+  .done{color:var(--ok);font-weight:700}
+  .empty{color:var(--muted);font-size:.95rem}
+  .progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:8px 0 2px}
+  .progress > div{height:100%;background:var(--accent);width:0;transition:width .25s}
+  .slider{display:flex;align-items:center;gap:12px}
+  .slider input{flex:1;accent-color:var(--accent)}
+  .score{font-weight:700;font-size:1.3rem;min-width:2.2ch;text-align:right}
+  table{width:100%;border-collapse:collapse;font-size:.92rem}
+  th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600}
+  ul.rules{padding-left:20px;margin:6px 0}
+  ul.rules li{margin:4px 0}
+  .tag{font-size:.78rem;font-weight:700;padding:1px 7px;border-radius:99px;background:var(--line);color:var(--muted);vertical-align:middle;margin-left:6px;white-space:nowrap;display:inline-block}
+  .tag.on{background:var(--accent-soft);color:var(--accent)}
+  .btns{display:flex;gap:8px;flex:0 0 auto}
+  .btn.small{padding:6px 12px;font-size:.9rem}
+  .cfg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+  .cfg label{font-size:.85rem;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+  .cfg input{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:6px 10px;width:100%}
+  .overlay{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:10px;padding:24px 20px calc(24px + env(safe-area-inset-bottom));text-align:center}
+  .overlay[hidden]{display:none}
+  .t-top{position:absolute;top:calc(12px + env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between}
+  .t-name{font-size:1.25rem;font-weight:700;max-width:520px}
+  .t-phase{font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+  .t-phase.rest{color:var(--muted)} .t-phase.prep{color:var(--warn)}
+  .t-big{font-size:6rem;line-height:1;font-weight:800;font-variant-numeric:tabular-nums;margin:6px 0}
+  .t-big.text{font-size:2.6rem}
+  .t-sets{color:var(--muted);font-size:1rem}
+  .t-bar{width:min(420px,90%);height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+  .t-bar > div{height:100%;background:var(--accent);width:0}
+  .t-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+  .t-controls .btn{min-width:120px;padding:12px 18px;font-size:1.05rem}
+  .t-hint{color:var(--muted);font-size:.85rem;max-width:420px}
+  footer{max-width:760px;margin:0 auto;padding:8px 16px 32px;color:var(--muted);font-size:.82rem}
+</style>
+</head>
+<body>
+<header>
+  <h1>Колено — трекер упражнений</h1>
+  <p class="sub">Тендинопатия связки надколенника · хондромаляция надколенника · растяжение ПКС</p>
+</header>
+
+<nav><div class="wrap" role="tablist">
+  <button role="tab" data-tab="today" aria-selected="true">Сегодня</button>
+  <button role="tab" data-tab="catalog" aria-selected="false">Упражнения</button>
+  <button role="tab" data-tab="diary" aria-selected="false">Дневник боли</button>
+  <button role="tab" data-tab="rules" aria-selected="false">Правила</button>
+  <button role="tab" data-tab="data" aria-selected="false">Данные</button>
+</div></nav>
+
+<main>
+  <!-- СЕГОДНЯ -->
+  <section id="tab-today">
+    <div class="card banner"><strong>Не план лечения.</strong> Это справочник по материалам NHS. В «Сегодня» попадают только упражнения, которые ты отметил как одобренные физическим терапевтом. Подходы и повторения — как скажет терапевт.</div>
+    <div class="card">
+      <h3 id="today-date"></h3>
+      <div class="progress"><div id="today-bar"></div></div>
+      <div class="src" id="today-count"></div>
+      <div id="today-list"></div>
+    </div>
+  </section>
+
+  <!-- КАТАЛОГ -->
+  <section id="tab-catalog" hidden>
+    <div id="catalog"></div>
+    <div class="card">
+      <h3>Только у специалиста</h3>
+      <p class="how">Мобилизация надколенника и работа на ROM (из твоего плана реабилитации) — это ручные техники терапевта, дома их не повторить.</p>
+    </div>
+  </section>
+
+  <!-- ДНЕВНИК -->
+  <section id="tab-diary" hidden>
+    <div class="card">
+      <h3>Запись за день</h3>
+      <div class="row"><input type="date" id="d-date" aria-label="Дата"></div>
+      <p class="src" style="margin:12px 0 2px">Боль при спуске по лестнице (0 — нет, 10 — максимум)</p>
+      <div class="slider"><input type="range" id="d-stairs" min="0" max="10" value="0" aria-label="Боль при спуске"><span class="score" id="d-stairs-v">0</span></div>
+      <p class="src" style="margin:12px 0 2px">Боль после долгого сидения</p>
+      <div class="slider"><input type="range" id="d-sit" min="0" max="10" value="0" aria-label="Боль после сидения"><span class="score" id="d-sit-v">0</span></div>
+      <div class="row"><label class="chk"><input type="checkbox" id="d-lock"> Было «заклинивание»</label></div>
+      <div class="row"><input type="text" id="d-note" placeholder="Заметка (что делал, что болело)"></div>
+      <div class="row"><button class="btn" id="d-save">Сохранить</button><span class="src" id="d-msg"></span></div>
+    </div>
+    <div class="card">
+      <h3>Последние записи</h3>
+      <div id="diary-table"></div>
+    </div>
+  </section>
+
+  <!-- ПРАВИЛА -->
+  <section id="tab-rules" hidden>
+    <div class="card">
+      <h3>Боль во время упражнений</h3>
+      <ul class="rules">
+        <li>Боль во время упражнения не должна быть больше обычной более чем на 1–2 балла по шкале 0–10.</li>
+        <li>Она должна пройти в течение примерно 30 минут, и на следующий день колено не должно быть хуже.</li>
+        <li>Если стало хуже — в следующий раз меньше повторений или шаг назад к более лёгкому упражнению.</li>
+        <li>Упростить упражнение можно так: меньше амплитуда, меньше повторений, меньше вес, медленнее темп, больше отдых между подходами.</li>
+      </ul>
+      <p class="src">Источники: <a href="https://wiltshirehealthandcare.nhs.uk/wp-content/uploads/sites/8/2024/08/Patella-Tendinopathy-PIL-100.0.pdf" target="_blank" rel="noopener">Wiltshire Health and Care</a>, <a href="https://newcastle-hospitals.nhs.uk/wp-content/uploads/2021/11/2024-Newcastle-OHS-Anterior-Knee-Pain-leaflet_PRINT_ONLY-1.pdf" target="_blank" rel="noopener">Newcastle Hospitals</a>, <a href="https://www.nhsaaa.net/?p=6505" target="_blank" rel="noopener">NHS Ayrshire &amp; Arran</a></p>
+    </div>
+    <div class="card">
+      <h3>Логика этапов</h3>
+      <ul class="rules">
+        <li><b>Этап 1 — изометрия</b>: удержание без движения. Старт, когда больно даже на лестнице.</li>
+        <li><b>Этап 2 — изотоника</b>: силовые с движением, когда этап 1 переносится хорошо.</li>
+        <li><b>Этап 3 — «пружинящие»</b>: прыжки и быстрые движения, когда сила и боль заметно улучшились.</li>
+      </ul>
+      <p class="src">Источник: <a href="https://sbuhb.nhs.wales/hospitals/a-z-services/physiotherapy/musculoskeletal-physiotherapy/knee-pain/patella-tendinopathy/" target="_blank" rel="noopener">NHS Swansea Bay</a></p>
+    </div>
+    <div class="card">
+      <h3>Когда связаться с врачом</h3>
+      <ul class="rules">
+        <li>Колено стало отекать или ощущается нестабильным, «подкашивается».</li>
+        <li>Боль растёт от недели к неделе, несмотря на упражнения.</li>
+        <li>«Заклинивание» стало чаще.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ДАННЫЕ -->
+  <section id="tab-data" hidden>
+    <div class="card">
+      <h3>Резервная копия</h3>
+      <p class="how">Все отметки хранятся только в этом браузере на этом устройстве. Скачай копию, чтобы не потерять их или перенести на другой телефон.</p>
+      <div class="row">
+        <button class="btn" id="export">Скачать копию (JSON)</button>
+        <label class="btn ghost" style="display:inline-block">Загрузить копию<input type="file" id="import" accept="application/json" hidden></label>
+      </div>
+      <p class="src" id="data-msg"></p>
+    </div>
+    <div class="card">
+      <h3>Сбросить всё</h3>
+      <div class="row"><button class="btn ghost" id="reset">Удалить все данные на этом устройстве</button></div>
+    </div>
+  </section>
+</main>
+
+<div id="timer" class="overlay" hidden role="dialog" aria-label="Таймер упражнения">
+  <div class="t-top">
+    <button class="btn ghost small" id="t-voice">🔊 Голос: вкл</button>
+    <button class="btn ghost small" id="t-close" aria-label="Закрыть таймер">✕ Стоп</button>
+  </div>
+  <div class="t-name" id="t-name"></div>
+  <div class="t-phase" id="t-phase"></div>
+  <div class="t-big" id="t-big"></div>
+  <div class="t-bar"><div id="t-bar"></div></div>
+  <div class="t-sets" id="t-sets"></div>
+  <div class="t-controls">
+    <button class="btn" id="t-done" hidden>Готово</button>
+    <button class="btn ghost" id="t-pause">Пауза</button>
+    <button class="btn ghost" id="t-skip">Пропустить</button>
+  </div>
+  <p class="t-hint" id="t-hint"></p>
+</div>
+
+<footer>Упражнения взяты из открытых материалов NHS для пациентов. Страница не заменяет назначения врача или физического терапевта.</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var SRC = {
+    swansea: ["NHS Swansea Bay — тендинопатия надколенника","https://sbuhb.nhs.wales/hospitals/a-z-services/physiotherapy/musculoskeletal-physiotherapy/knee-pain/patella-tendinopathy/"],
+    ayrshire: ["NHS Ayrshire & Arran — тендинопатия надколенника","https://www.nhsaaa.net/?p=6505"],
+    leeds: ["Leeds NHS — тендинопатия надколенника","https://leedscommunityhealthcare.nhs.uk/our-services-a-z/musculoskeletal-msk/knee-problems/known-diagnosed-knee-problems/patella-tendonopathy"],
+    wilts: ["Wiltshire Health and Care — брошюра (PDF)","https://wiltshirehealthandcare.nhs.uk/wp-content/uploads/sites/8/2024/08/Patella-Tendinopathy-PIL-100.0.pdf"],
+    ruhT: ["RUH Bath — тендинопатия надколенника (PDF)","https://www.ruh.nhs.uk/patients/services/physiotherapy/documents/Patellar_Tendinopathy.pdf"],
+    ruhP: ["RUH Bath — пателлофеморальная боль (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY027_Patellofemoral_pain.pdf"],
+    ruhA: ["RUH Bath — буклет по ПКС (PDF, со ссылками на видео)","https://www.ruh.nhs.uk/patients/patient_information/PHY034_ACL_prehab_booklet.pdf"],
+    cuh: ["Cambridge University Hospitals — передняя боль в колене","https://cuh.nhs.uk/patient-information/patello-femoral-syndrome-anterior-knee-pain-or-chondromalacia-patella"],
+    lanark: ["NHS Lanarkshire — пателлофеморальная боль (8 видео по этапам)","https://www.nhslanarkshire.scot.nhs.uk/?p=27401"]
+  };
+
+  var STAGES = [
+    {id:1, title:"Этап 1 — изометрия", note:"Удержание без движения. С него начинают, когда колено болит даже на лестнице."},
+    {id:2, title:"Этап 2 — изотоника", note:"Силовые с движением. В NHS Swansea Bay: 3–4 подхода, вес от 15ПМ постепенно до 6ПМ, через день. ПМ — повторный максимум, вес, с которым получается ровно столько повторений."},
+    {id:3, title:"Этап 3 — «пружинящие» нагрузки", note:"Прыжки и быстрые движения. Только когда сила и боль заметно улучшились и терапевт дал добро."}
+  ];
+
+  var EX = [
+    {id:"qset", cfg:{sets:10,hold:10,reps:0,rest:10}, stage:1, name:"Напряжение квадрицепса сидя",
+     how:"Сядь на пол или кровать, больная нога вытянута, вторая согнута. Напряги мышцы передней поверхности бедра, прижимая колено вниз, подержи и расслабь.",
+     params:"По NHS Ayrshire: 3 раза в день", src:["ayrshire"]},
+    {id:"isoext", cfg:{sets:5,hold:45,reps:0,rest:60}, stage:1, name:"Изометрическое разгибание колена",
+     how:"Сидя, упрись голенью в неподвижную опору или в закреплённую резинку и дави так, будто разгибаешь колено, но без движения.",
+     params:"5 × 30–45 с, ежедневно", src:["wilts","swansea"]},
+    {id:"wallsit", cfg:{sets:5,hold:45,reps:0,rest:90}, stage:1, name:"«Стульчик» у стены",
+     how:"Встань спиной к стене и съедь вниз, пока колени не согнутся примерно на 70°. Держи позицию.",
+     params:"5 × 30–45 с, отдых 1–2 мин, 3–5 раз в день",
+     caution:"При хондромаляции глубина сгибания важна — угол уточни у терапевта.", src:["leeds"]},
+    {id:"slr", cfg:{sets:3,hold:0,reps:10,rest:60}, stage:1, name:"Подъём прямой ноги",
+     how:"Лёжа на спине, вытяни ногу. Напряги бедро, подними прямую ногу примерно на 15 см и медленно опусти.",
+     params:"3 × 10", src:["ruhP"]},
+    {id:"quadiso", cfg:{sets:3,hold:0,reps:15,rest:90}, stage:2, name:"Силовое на квадрицепс",
+     how:"Разгибание ног в тренажёре, жим ногами или их вариант с резинкой — конкретное упражнение и амплитуду выбирает терапевт.",
+     params:"3–4 подхода, 15ПМ → 6ПМ, через день", src:["swansea","ruhT"]},
+    {id:"stepup", cfg:{sets:3,hold:0,reps:10,rest:90}, stage:2, name:"Зашагивание на ступеньку (step-up)",
+     how:"Встань лицом к ступеньке, больная нога на ступеньке. Поднимись, перенося вес на неё, и медленно опустись.",
+     params:"По указанию терапевта", src:["cuh","ruhP"]},
+    {id:"hip", cfg:{sets:3,hold:0,reps:15,rest:60}, stage:2, name:"Мышцы таза и бедра",
+     how:"Например, отведение ноги лёжа на боку. По NHS Lanarkshire, сочетание упражнений для бедра и колена работает лучше, чем только для колена.",
+     params:"По указанию терапевта", src:["lanark"]},
+    {id:"acl", cfg:{sets:3,hold:0,reps:10,rest:60}, stage:2, name:"Стабильность колена (с учётом ПКС)",
+     how:"Упражнения на контроль и стабильность колена. Подбирает терапевт с учётом растяжения ПКС.",
+     params:"По указанию терапевта", src:["ruhA"]},
+    {id:"energy", cfg:{sets:3,hold:0,reps:10,rest:90}, stage:3, name:"Прыжковые упражнения",
+     how:"Сначала постепенно увеличивают объём, потом интенсивность. Только с разрешения терапевта.",
+     params:"По указанию терапевта", src:["swansea","ruhT"]}
+  ];
+
+  // ---------- storage ----------
+  var KEY = "knee-rehab-v1";
+  var mem = {approved:{}, notes:{}, log:{}, diary:{}, cfg:{}, settings:{voice:true}};
+  function load(){
+    try{ var raw = localStorage.getItem(KEY); if(raw){ var d = JSON.parse(raw); mem = normalize(d); } }catch(e){}
+  }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(mem)); }catch(e){} }
+  function normalize(d){
+    d = d && typeof d === "object" ? d : {};
+    return {approved:d.approved||{}, notes:d.notes||{}, log:d.log||{}, diary:d.diary||{}, cfg:d.cfg||{}, settings:Object.assign({voice:true}, d.settings||{})};
+  }
+
+  // ---------- helpers ----------
+  function pad(n){ return (n<10?"0":"")+n; }
+  function todayKey(){ var d=new Date(); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+  function fmt(k){ var p=k.split("-"); return p[2]+"."+p[1]+"."+p[0]; }
+  function el(tag, attrs, children){
+    var n=document.createElement(tag);
+    if(attrs) for(var a in attrs){ if(a==="text") n.textContent=attrs[a]; else if(a==="html") n.innerHTML=attrs[a]; else n.setAttribute(a,attrs[a]); }
+    (children||[]).forEach(function(c){ if(c) n.appendChild(c); });
+    return n;
+  }
+  function getCfg(e){ return Object.assign({}, e.cfg, mem.cfg[e.id]||{}); }
+  function cfgText(e){
+    var c=getCfg(e);
+    var work = c.hold>0 ? (c.hold+" с удержание") : (c.reps+" повт.");
+    return "Таймер: "+c.sets+" × "+work+(c.sets>1 && c.rest>0 ? ", отдых "+c.rest+" с" : "");
+  }
+  function srcLinks(keys){
+    var p=el("p",{"class":"src"}); p.appendChild(document.createTextNode("Источник: "));
+    keys.forEach(function(k,i){
+      if(i) p.appendChild(document.createTextNode(" · "));
+      p.appendChild(el("a",{href:SRC[k][1],target:"_blank",rel:"noopener",text:SRC[k][0]}));
+    });
+    return p;
+  }
+
+  // ---------- tabs ----------
+  var tabs = document.querySelectorAll("nav button");
+  tabs.forEach(function(b){
+    b.addEventListener("click", function(){
+      tabs.forEach(function(x){ x.setAttribute("aria-selected", x===b ? "true":"false"); });
+      document.querySelectorAll("main > section").forEach(function(s){ s.hidden = s.id !== "tab-"+b.dataset.tab; });
+      if(b.dataset.tab==="today") renderToday();
+      if(b.dataset.tab==="diary") renderDiary();
+      window.scrollTo(0,0);
+    });
+  });
+
+  // ---------- catalog ----------
+  function renderCatalog(){
+    var root=document.getElementById("catalog"); root.innerHTML="";
+    STAGES.forEach(function(st){
+      root.appendChild(el("h2",{text:st.title}));
+      root.appendChild(el("p",{"class":"stage-note",text:st.note}));
+      EX.filter(function(e){return e.stage===st.id;}).forEach(function(e){
+        var chk=el("input",{type:"checkbox"}); chk.checked=!!mem.approved[e.id];
+        var tag=el("span",{"class":"tag"+(chk.checked?" on":""),text:chk.checked?"одобрено":"не одобрено"});
+        chk.addEventListener("change",function(){
+          mem.approved[e.id]=chk.checked; save();
+          tag.className="tag"+(chk.checked?" on":""); tag.textContent=chk.checked?"одобрено":"не одобрено";
+        });
+        var ta=el("textarea",{placeholder:"Подходы, повторения, угол, поправки по технике…"});
+        ta.value=mem.notes[e.id]||"";
+        ta.addEventListener("input",function(){ mem.notes[e.id]=ta.value; save(); });
+        var det=el("details",null,[el("summary",{text:"Указания терапевта"}),ta]);
+        if(ta.value) det.open=true;
+        var c=getCfg(e), grid=el("div",{"class":"cfg"});
+        [["sets","Подходы",1,30],["hold","Удержание, с (0 — на повторы)",0,600],["reps","Повторы в подходе",0,100],["rest","Отдых, с",0,600]].forEach(function(f){
+          var inp=el("input",{type:"number",min:String(f[2]),max:String(f[3]),inputmode:"numeric"});
+          inp.value=c[f[0]];
+          inp.addEventListener("change",function(){
+            var v=Math.max(f[2],Math.min(f[3],parseInt(inp.value,10)||0)); inp.value=v;
+            mem.cfg[e.id]=Object.assign({},mem.cfg[e.id]||{}); mem.cfg[e.id][f[0]]=v; save();
+            sum.textContent=cfgText(e);
+          });
+          grid.appendChild(el("label",null,[document.createTextNode(f[1]),inp]));
+        });
+        var sum=el("p",{"class":"src",text:cfgText(e)});
+        var tdet=el("details",null,[el("summary",{text:"Таймер (по умолчанию — правь под терапевта)"}),sum,grid]);
+        root.appendChild(el("div",{"class":"card"},[
+          el("h3",null,[document.createTextNode(e.name),tag]),
+          el("span",{"class":"params",text:e.params}),
+          el("p",{"class":"how",text:e.how}),
+          e.caution ? el("p",{"class":"caution",text:"⚠ "+e.caution}) : null,
+          srcLinks(e.src),
+          el("div",{"class":"row"},[el("label",{"class":"chk"},[chk,document.createTextNode("Одобрено терапевтом")])]),
+          tdet,
+          det
+        ]));
+      });
+    });
+  }
+
+  // ---------- today ----------
+  function renderToday(){
+    var k=todayKey();
+    var dt=new Date();
+    document.getElementById("today-date").textContent = dt.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"});
+    var list=document.getElementById("today-list"); list.innerHTML="";
+    var approved=EX.filter(function(e){return mem.approved[e.id];});
+    var done=(mem.log[k]||[]);
+    if(!approved.length){
+      list.appendChild(el("p",{"class":"empty",text:"Пока пусто. Открой «Упражнения» и отметь те, что одобрил терапевт."}));
+    }
+    approved.forEach(function(e){
+      var isDone=done.indexOf(e.id)>-1;
+      var btn=el("button",{"class":isDone?"btn ghost":"btn",text:isDone?"Отменить":"Сделал"});
+      btn.addEventListener("click",function(){
+        var arr=mem.log[k]||[]; var i=arr.indexOf(e.id);
+        if(i>-1) arr.splice(i,1); else arr.push(e.id);
+        mem.log[k]=arr; save(); renderToday();
+      });
+      btn.className += " small";
+      var start=el("button",{"class":"btn small",text:"▶ Старт","aria-label":"Запустить таймер: "+e.name});
+      start.addEventListener("click",function(){ Timer.start(e); });
+      if(isDone) start.className="btn ghost small";
+      list.appendChild(el("div",{"class":"today-item"},[
+        el("div",null,[
+          el("div",null,[document.createTextNode(e.name+" "), isDone?el("span",{"class":"done",text:"✓"}):null]),
+          el("div",{"class":"meta",text:cfgText(e)}),
+          mem.notes[e.id] ? el("div",{"class":"meta",text:"Терапевт: "+mem.notes[e.id]}) : null
+        ]),
+        el("div",{"class":"btns"},[start,btn])
+      ]));
+    });
+    var n=approved.filter(function(e){return done.indexOf(e.id)>-1;}).length;
+    document.getElementById("today-bar").style.width = approved.length ? Math.round(n/approved.length*100)+"%" : "0";
+    document.getElementById("today-count").textContent = approved.length ? ("Сделано "+n+" из "+approved.length) : "";
+  }
+
+  // ---------- diary ----------
+  var dDate=document.getElementById("d-date"), dStairs=document.getElementById("d-stairs"),
+      dSit=document.getElementById("d-sit"), dLock=document.getElementById("d-lock"), dNote=document.getElementById("d-note");
+  function bindSlider(inp,out){ inp.addEventListener("input",function(){ document.getElementById(out).textContent=inp.value; }); }
+  bindSlider(dStairs,"d-stairs-v"); bindSlider(dSit,"d-sit-v");
+  function fillDiaryForm(k){
+    var r=mem.diary[k]||{stairs:0,sit:0,lock:false,note:""};
+    dStairs.value=r.stairs; dSit.value=r.sit; dLock.checked=!!r.lock; dNote.value=r.note||"";
+    document.getElementById("d-stairs-v").textContent=r.stairs;
+    document.getElementById("d-sit-v").textContent=r.sit;
+  }
+  dDate.addEventListener("change",function(){ if(dDate.value) fillDiaryForm(dDate.value); });
+  document.getElementById("d-save").addEventListener("click",function(){
+    var k=dDate.value||todayKey();
+    mem.diary[k]={stairs:+dStairs.value, sit:+dSit.value, lock:dLock.checked, note:dNote.value.trim()};
+    save(); renderDiary();
+    var m=document.getElementById("d-msg"); m.textContent="Сохранено за "+fmt(k); setTimeout(function(){m.textContent="";},2500);
+  });
+  function renderDiary(){
+    if(!dDate.value){ dDate.value=todayKey(); fillDiaryForm(dDate.value); }
+    var root=document.getElementById("diary-table"); root.innerHTML="";
+    var keys=Object.keys(mem.diary).sort().reverse().slice(0,30);
+    if(!keys.length){ root.appendChild(el("p",{"class":"empty",text:"Записей пока нет."})); return; }
+    var tb=el("tbody");
+    keys.forEach(function(k){
+      var r=mem.diary[k]; var ex=(mem.log[k]||[]).length;
+      tb.appendChild(el("tr",null,[
+        el("td",{text:fmt(k)}), el("td",{text:String(r.stairs)}), el("td",{text:String(r.sit)}),
+        el("td",{text:r.lock?"да":"—"}), el("td",{text:String(ex)}), el("td",{text:r.note||""})
+      ]));
+    });
+    root.appendChild(el("table",null,[
+      el("thead",null,[el("tr",null,[el("th",{text:"Дата"}),el("th",{text:"Спуск"}),el("th",{text:"Сидение"}),el("th",{text:"Блок"}),el("th",{text:"Упр."}),el("th",{text:"Заметка"})])]),
+      tb
+    ]));
+  }
+
+  // ---------- data ----------
+  document.getElementById("export").addEventListener("click",function(){
+    var blob=new Blob([JSON.stringify(mem,null,2)],{type:"application/json"});
+    var a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+    a.download="knee-rehab-"+todayKey()+".json"; document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },500);
+  });
+  document.getElementById("import").addEventListener("change",function(ev){
+    var f=ev.target.files[0]; if(!f) return;
+    var rd=new FileReader();
+    rd.onload=function(){
+      var msg=document.getElementById("data-msg");
+      try{ mem=normalize(JSON.parse(rd.result)); save(); renderCatalog(); renderToday(); msg.textContent="Копия загружена."; }
+      catch(e){ msg.textContent="Не получилось прочитать файл."; }
+    };
+    rd.readAsText(f); ev.target.value="";
+  });
+  document.getElementById("reset").addEventListener("click",function(){
+    if(!confirm("Удалить все отметки, заметки и дневник на этом устройстве?")) return;
+    mem=normalize({}); save(); renderCatalog(); renderToday();
+    document.getElementById("data-msg").textContent="Данные удалены.";
+  });
+
+  // ---------- voice / sound ----------
+  var Voice = (function(){
+    var ruVoice=null, synth=window.speechSynthesis||null;
+    function pick(){
+      if(!synth) return;
+      try{
+        var vs=synth.getVoices()||[];
+        ruVoice = vs.filter(function(v){return /^ru/i.test(v.lang);})
+                    .sort(function(a,b){ return (b.localService?1:0)-(a.localService?1:0); })[0] || null;
+      }catch(e){}
+    }
+    if(synth){ pick(); try{ synth.addEventListener("voiceschanged",pick); }catch(e){ synth.onvoiceschanged=pick; } }
+    function say(text, interrupt){
+      if(!mem.settings.voice || !synth) return;
+      try{
+        if(interrupt) synth.cancel();
+        var u=new SpeechSynthesisUtterance(text);
+        u.lang="ru-RU"; if(ruVoice) u.voice=ruVoice; u.rate=1.05;
+        synth.speak(u);
+      }catch(e){}
+    }
+    function stop(){ try{ if(synth) synth.cancel(); }catch(e){} }
+    function hasRu(){ return !!ruVoice; }
+    function available(){ return !!synth; }
+    return {say:say, stop:stop, hasRu:hasRu, available:available};
+  })();
+
+  var Sound = (function(){
+    var ctx=null;
+    function unlock(){
+      try{
+        if(!ctx){ var AC=window.AudioContext||window.webkitAudioContext; if(AC) ctx=new AC(); }
+        if(ctx && ctx.state==="suspended") ctx.resume();
+      }catch(e){}
+    }
+    function beep(freq, ms){
+      if(!ctx) return;
+      try{
+        var o=ctx.createOscillator(), g=ctx.createGain();
+        o.frequency.value=freq||880; o.type="sine";
+        g.gain.setValueAtTime(0.0001,ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.25,ctx.currentTime+0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+(ms||150)/1000);
+        o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime+(ms||150)/1000+0.02);
+      }catch(e){}
+    }
+    function buzz(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+    return {unlock:unlock, beep:beep, buzz:buzz};
+  })();
+
+  var Wake = (function(){
+    var lock=null, want=false;
+    function req(){
+      if(!want || !("wakeLock" in navigator)) return;
+      try{ navigator.wakeLock.request("screen").then(function(l){ lock=l; }).catch(function(){}); }catch(e){}
+    }
+    document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="visible" && want) req(); });
+    return {
+      on:function(){ want=true; req(); },
+      off:function(){ want=false; try{ if(lock) lock.release(); }catch(e){} lock=null; },
+      supported:function(){ return "wakeLock" in navigator; }
+    };
+  })();
+
+  // ---------- timer ----------
+  var Timer = (function(){
+    var $=function(id){return document.getElementById(id);};
+    var ov=$("timer"), tName=$("t-name"), tPhase=$("t-phase"), tBig=$("t-big"), tSets=$("t-sets"),
+        tBar=$("t-bar"), bDone=$("t-done"), bPause=$("t-pause"), bSkip=$("t-skip"), bClose=$("t-close"),
+        bVoice=$("t-voice"), tHint=$("t-hint");
+    var ex=null, cfg=null, phases=[], idx=0, endAt=0, remain=0, paused=false, iv=null, spoken={};
+    var PREP=5;
+
+    function plural(n, one, few, many){
+      var m10=n%10, m100=n%100;
+      if(m10===1 && m100!==11) return one;
+      if(m10>=2 && m10<=4 && (m100<12 || m100>14)) return few;
+      return many;
+    }
+    function build(){
+      phases=[{type:"prep", dur:PREP}];
+      for(var i=1;i<=cfg.sets;i++){
+        phases.push(cfg.hold>0 ? {type:"hold", dur:cfg.hold, set:i} : {type:"reps", set:i});
+        if(i<cfg.sets && cfg.rest>0) phases.push({type:"rest", dur:cfg.rest, set:i});
+      }
+    }
+    function voiceBtn(){ bVoice.textContent = mem.settings.voice ? "🔊 Голос: вкл" : "🔇 Голос: выкл"; }
+
+    function start(e){
+      ex=e; cfg=getCfg(e);
+      if(!cfg.sets){ return; }
+      Sound.unlock(); Wake.on(); build(); idx=0; paused=false;
+      tName.textContent=e.name; voiceBtn();
+      var hints=[];
+      if(!Voice.available()) hints.push("Голосовой движок в этом браузере недоступен — будут только звуковые сигналы.");
+      else if(!Voice.hasRu()) hints.push("Русский голос не найден — браузер может читать с акцентом. Его можно установить в настройках речи телефона.");
+      if(!Wake.supported()) hints.push("Этот браузер не умеет держать экран включённым — увеличь время автоблокировки на время занятия.");
+      tHint.textContent=hints.join(" ");
+      ov.hidden=false; document.body.style.overflow="hidden";
+      Voice.say(e.name+". "+describe(), true);
+      enter();
+      clearInterval(iv); iv=setInterval(tick,200);
+    }
+    function describe(){
+      var s=cfg.sets+" "+plural(cfg.sets,"подход","подхода","подходов");
+      if(cfg.hold>0) s+=" по "+cfg.hold+" "+plural(cfg.hold,"секунде","секунды","секунд");
+      else s+=" по "+cfg.reps+" "+plural(cfg.reps,"повторению","повторения","повторений");
+      return s;
+    }
+    function enter(){
+      var p=phases[idx]; spoken={};
+      tPhase.className="t-phase"+(p.type==="rest"?" rest":p.type==="prep"?" prep":"");
+      tBig.className="t-big"; bDone.hidden=true; bPause.hidden=false;
+      if(p.type==="prep"){ tPhase.textContent="Приготовься"; tSets.textContent=describe(); }
+      if(p.type==="hold"){ tPhase.textContent="Держи"; tSets.textContent="Подход "+p.set+" из "+cfg.sets;
+        Voice.say("Подход "+p.set+". Держи.", false); Sound.beep(880,200); Sound.buzz(150); }
+      if(p.type==="rest"){ tPhase.textContent="Отдых"; tSets.textContent="Следующий: подход "+(p.set+1)+" из "+cfg.sets;
+        Voice.say("Отдых "+p.dur+" "+plural(p.dur,"секунда","секунды","секунд")+".", true); Sound.beep(520,250); Sound.buzz([80,60,80]); }
+      if(p.type==="reps"){
+        tPhase.textContent="Выполняй"; tSets.textContent="Подход "+p.set+" из "+cfg.sets;
+        tBig.className="t-big text"; tBig.textContent=cfg.reps+" "+plural(cfg.reps,"повтор","повтора","повторов");
+        bDone.hidden=false; bPause.hidden=true; tBar.style.width="0";
+        Voice.say("Подход "+p.set+". "+cfg.reps+" "+plural(cfg.reps,"повторение","повторения","повторений")+". Нажми готово, когда закончишь.", false);
+        Sound.beep(880,200); Sound.buzz(150);
+        return;
+      }
+      endAt=Date.now()+p.dur*1000; remain=p.dur*1000; render();
+    }
+    function render(){
+      var p=phases[idx]; if(!p || p.type==="reps") return;
+      var left = paused ? remain : Math.max(0,endAt-Date.now());
+      var sec=Math.ceil(left/1000);
+      var m=Math.floor(sec/60), s=sec%60;
+      tBig.textContent = m>0 ? (m+":"+(s<10?"0":"")+s) : String(sec);
+      tBar.style.width = Math.min(100, (1-left/(p.dur*1000))*100)+"%";
+      return {left:left, sec:sec};
+    }
+    function tick(){
+      if(ov.hidden || paused) return;
+      var p=phases[idx]; if(!p || p.type==="reps") return;
+      var r=render(); if(!r) return;
+      if(p.dur>=20 && r.sec===10 && !spoken[10]){ spoken[10]=1; Voice.say(p.type==="rest"?"Через 10 секунд — следующий подход":"Осталось 10 секунд", false); }
+      if(r.sec<=3 && r.sec>=1 && !spoken[r.sec]){ spoken[r.sec]=1; Sound.beep(660,90); if(p.type!=="prep") Voice.say(["","один","два","три"][r.sec], true); }
+      if(r.left<=0) next();
+    }
+    function next(){
+      idx++;
+      if(idx>=phases.length){ finish(); return; }
+      enter();
+    }
+    function finish(){
+      clearInterval(iv); iv=null;
+      var k=todayKey(), arr=mem.log[k]||[];
+      if(arr.indexOf(ex.id)<0){ arr.push(ex.id); mem.log[k]=arr; save(); }
+      tPhase.className="t-phase"; tPhase.textContent="Готово";
+      tBig.className="t-big text"; tBig.textContent="✓ Упражнение выполнено";
+      tSets.textContent="Отмечено в «Сегодня»"; tBar.style.width="100%";
+      bDone.hidden=true; bPause.hidden=true; bSkip.hidden=true;
+      bClose.textContent="✕ Закрыть";
+      Voice.say("Упражнение завершено. Отличная работа.", true); Sound.beep(988,180); setTimeout(function(){Sound.beep(1318,260);},200); Sound.buzz([120,80,200]);
+      Wake.off();
+    }
+    function close(){
+      clearInterval(iv); iv=null; Voice.stop(); Wake.off();
+      ov.hidden=true; document.body.style.overflow="";
+      bSkip.hidden=false; bPause.hidden=false; bPause.textContent="Пауза"; bClose.textContent="✕ Стоп";
+      renderToday();
+    }
+    bPause.addEventListener("click",function(){
+      var p=phases[idx]; if(!p || p.type==="reps") return;
+      if(!paused){ remain=Math.max(0,endAt-Date.now()); paused=true; bPause.textContent="Продолжить"; Voice.say("Пауза", true); Wake.off(); }
+      else { endAt=Date.now()+remain; paused=false; bPause.textContent="Пауза"; Voice.say("Продолжаем", true); Wake.on(); }
+      render();
+    });
+    bSkip.addEventListener("click",function(){ if(paused){ paused=false; bPause.textContent="Пауза"; } Voice.stop(); next(); });
+    bDone.addEventListener("click",function(){ Voice.stop(); next(); });
+    bClose.addEventListener("click",close);
+    bVoice.addEventListener("click",function(){
+      mem.settings.voice=!mem.settings.voice; save(); voiceBtn();
+      if(!mem.settings.voice) Voice.stop(); else Voice.say("Голос включён", true);
+    });
+    document.addEventListener("keydown",function(ev){ if(!ov.hidden && ev.key==="Escape") close(); });
+    return {start:start};
+  })();
+
+  load(); renderCatalog(); renderToday();
+})();
+</script>
+</body>
+</html>
