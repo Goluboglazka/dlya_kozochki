@@ -48,6 +48,16 @@
   .seg button{flex:1;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;padding:7px 10px;border-radius:8px;cursor:pointer}
   .seg button.on{background:var(--card);color:var(--accent);box-shadow:0 1px 2px rgba(0,0,0,.08)}
   .daytype{font-weight:700;color:var(--accent)}
+  .stage-box{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px}
+  .stage-box .st-title{font-weight:700;font-size:1.05rem}
+  .stage-box .st-sub{color:var(--muted);font-size:.85rem}
+  .linkbtn{border:0;background:transparent;color:var(--accent);font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;padding:6px 0;text-align:right}
+  .switch-panel{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px;background:var(--bg)}
+  .switch-panel[hidden]{display:none}
+  .switch-panel h4{margin:0 0 6px;font-size:.98rem}
+  .switch-panel label{display:flex;gap:10px;align-items:flex-start;margin:8px 0;font-size:.93rem;cursor:pointer}
+  .switch-panel input{width:20px;height:20px;flex:0 0 auto;margin-top:2px;accent-color:var(--accent)}
+  .btn:disabled{opacity:.4;cursor:default}
   .ex-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
   .ex-row:last-child{border-bottom:0}
   .ex-row .thumb{flex:0 0 64px;height:48px;overflow:hidden;background:var(--bg);border-radius:8px}
@@ -132,9 +142,23 @@
   <section id="tab-today">
     <div class="card">
       <h3 id="today-date"></h3>
-      <div class="row" style="margin-top:6px"><div class="seg" id="stage-seg" style="flex:1">
-        <button data-stage="1">Этап 1</button><button data-stage="2">Этап 2</button>
-      </div></div>
+      <div class="stage-box">
+        <div><div class="st-title" id="st-title"></div><div class="st-sub" id="st-sub"></div></div>
+        <button class="linkbtn" id="st-change"></button>
+      </div>
+      <div class="switch-panel" id="sw-up" hidden>
+        <h4>Переход на этап 2</h4>
+        <div class="muted">Переходи, только если верны все три пункта:</div>
+        <label><input type="checkbox" class="sw-c"> Упражнения этапа 1 проходят без усиления боли</label>
+        <label><input type="checkbox" class="sw-c"> Боль на лестнице заметно меньше, чем в начале</label>
+        <label><input type="checkbox" class="sw-c"> Утром после тренировки колено не хуже</label>
+        <div class="row"><button class="btn" id="sw-up-ok" disabled>Перейти на этап 2</button><button class="btn ghost" id="sw-up-cancel">Отмена</button></div>
+      </div>
+      <div class="switch-panel" id="sw-down" hidden>
+        <h4>Вернуться на этап 1?</h4>
+        <div class="muted">Стоит вернуться, если на этапе 2 боль усилилась и не проходит за сутки. Через несколько дней можно снова перейти на этап 2.</div>
+        <div class="row"><button class="btn" id="sw-down-ok">Вернуться на этап 1</button><button class="btn ghost" id="sw-down-cancel">Отмена</button></div>
+      </div>
       <p class="muted" id="day-type" style="margin:8px 0 0"></p>
       <div class="row"><button class="btn big" id="start-all">▶ Начать тренировку</button></div>
       <div class="progress"><div id="today-bar"></div></div>
@@ -274,7 +298,7 @@
   var mem={stage:1, cfg:{}, log:{}, settings:{voice:true}};
   function normalize(d){
     d = d && typeof d==="object" ? d : {};
-    return {stage:d.stage===2?2:1, cfg:d.cfg||{}, log:d.log||{}, settings:Object.assign({voice:true}, d.settings||{})};
+    return {stage:d.stage===2?2:1, stageSince:d.stageSince||null, cfg:d.cfg||{}, log:d.log||{}, settings:Object.assign({voice:true}, d.settings||{})};
   }
   function load(){ try{ var r=localStorage.getItem(KEY); if(r) mem=normalize(JSON.parse(r)); }catch(e){} }
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(mem)); }catch(e){} }
@@ -386,9 +410,21 @@
   });
 
   // ---------- today ----------
-  document.querySelectorAll("#stage-seg button").forEach(function(b){
-    b.addEventListener("click",function(){ mem.stage=+b.dataset.stage; save(); renderToday(); });
+  var swUp=document.getElementById("sw-up"), swDown=document.getElementById("sw-down"), upOk=document.getElementById("sw-up-ok");
+  var swChecks=document.querySelectorAll(".sw-c");
+  function closeSwitch(){ swUp.hidden=true; swDown.hidden=true; swChecks.forEach(function(c){ c.checked=false; }); upOk.disabled=true; }
+  swChecks.forEach(function(c){ c.addEventListener("change",function(){
+    upOk.disabled = !Array.prototype.every.call(swChecks,function(x){ return x.checked; });
+  }); });
+  document.getElementById("st-change").addEventListener("click",function(){
+    var panel = mem.stage===2 ? swDown : swUp;
+    var open = panel.hidden; closeSwitch(); panel.hidden = !open;
   });
+  function setStage(n){ mem.stage=n; mem.stageSince=keyOf(new Date()); save(); closeSwitch(); renderToday(); }
+  upOk.addEventListener("click",function(){ setStage(2); });
+  document.getElementById("sw-down-ok").addEventListener("click",function(){ setStage(1); });
+  document.getElementById("sw-up-cancel").addEventListener("click",closeSwitch);
+  document.getElementById("sw-down-cancel").addEventListener("click",closeSwitch);
   document.getElementById("start-all").addEventListener("click",function(){
     var plan=planFor(new Date()), done=entry(keyOf(new Date())).done;
     var rest=plan.filter(function(id){ return done.indexOf(id)<0; });
@@ -398,7 +434,11 @@
   function renderToday(){
     var now=new Date(), k=keyOf(now), plan=planFor(now), done=entry(k).done;
     document.getElementById("today-date").textContent=now.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"});
-    document.querySelectorAll("#stage-seg button").forEach(function(b){ b.className = (+b.dataset.stage===mem.stage)?"on":""; });
+    if(!mem.stageSince){ mem.stageSince=k; save(); }
+    var sd=dayNum(now)-dayNum(dateOf(mem.stageSince))+1;
+    document.getElementById("st-title").textContent = "Твой этап: "+mem.stage+(mem.stage===1?", изометрия":", силовые");
+    document.getElementById("st-sub").textContent = "День "+sd+" на этом этапе";
+    document.getElementById("st-change").textContent = mem.stage===1 ? "Перейти на этап 2" : "Вернуться на этап 1";
     var mins=Math.round(plan.reduce(function(s,id,i){ return s+exSeconds(id,i===0); },0)/60);
     var dt=document.getElementById("day-type");
     dt.innerHTML = (mem.stage===2 ? '<span class="daytype">'+(strengthDay(now)?"Силовой день":"Лёгкий день")+'</span> · ' : "")
